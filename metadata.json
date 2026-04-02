@@ -1,0 +1,7 @@
+{
+  "name": "LittleGuide (Parent Companion)",
+  "description": "Тёплый и умный помощник для родителей: ежедневные активности, трекер развития и AI-поддержка.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
