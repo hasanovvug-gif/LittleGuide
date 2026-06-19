@@ -80,24 +80,24 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
     .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
 
   return (
-    <div className="px-6 pt-8 pb-24 space-y-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="bg-indigo-100 p-2 rounded-full text-indigo-600">
+    <div className="space-y-6 px-5 pt-6 pb-24 sm:px-6">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 shadow-sm">
           <Moon size={24} />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-warm-900">{t('sleep_tracker', { defaultValue: 'Сон малюка' })}</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight text-warm-900">{t('sleep_tracker', { defaultValue: 'Сон малюка' })}</h2>
           <p className="text-sm text-warm-500">{t('sleep_tracker_desc', { defaultValue: 'Відстежуйте режим сну' })}</p>
         </div>
       </div>
 
       {/* Main Action Card */}
-      <div className={`rounded-3xl p-8 text-center shadow-lg transition-all duration-500 ${
+      <div className={`rounded-[32px] p-6 text-center shadow-lg transition-all duration-500 sm:p-8 ${
         activeSession 
           ? 'bg-gradient-to-br from-indigo-900 to-slate-800 text-white' 
-          : 'bg-white border border-warm-200 text-warm-900'
+          : 'glass-card border border-white/60 text-warm-900'
       }`}>
-        <div className="mb-6 h-32 flex items-center justify-center">
+        <div className="mb-6 flex h-32 items-center justify-center">
           <AnimatePresence mode="wait">
             {activeSession ? (
               <motion.div
@@ -126,14 +126,14 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
         </div>
         
         <div className="mb-6">
-          <h3 className="text-xl font-bold mb-2">
+          <h3 className="mb-2 text-2xl font-extrabold">
             {activeSession 
               ? t('baby_is_sleeping', { defaultValue: 'Малюк спить' }) 
               : t('baby_is_awake', { defaultValue: 'Малюк не спить' })}
           </h3>
           
           {activeSession && (
-            <div className="text-4xl font-light font-mono mb-2 text-indigo-200">
+            <div className="mb-2 text-4xl font-light font-mono text-indigo-200">
               {formatDuration(getActiveDuration())}
             </div>
           )}
@@ -141,7 +141,7 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
 
         <button
           onClick={handleToggleSleep}
-          className={`w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-transform active:scale-95 ${
+          className={`flex min-h-[58px] w-full items-center justify-center gap-3 rounded-[24px] py-4 text-base font-extrabold transition-transform active:scale-95 ${
             activeSession
               ? 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
               : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200'
@@ -162,17 +162,17 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
       </div>
 
       {/* Today's Summary */}
-      <div className="bg-white/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-white/50 flex items-center justify-between">
+      <div className="glass-card flex items-center justify-between rounded-[28px] border border-white/60 p-5 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="bg-blue-100 p-2 rounded-xl text-blue-600">
+          <div className="rounded-2xl bg-blue-100 p-2.5 text-blue-600">
             <Clock size={20} />
           </div>
           <div>
-            <p className="text-sm font-semibold text-warm-900">{t('total_sleep_today', { defaultValue: 'Сну за сьогодні' })}</p>
+            <p className="text-sm font-bold text-warm-900">{t('total_sleep_today', { defaultValue: 'Сну за сьогодні' })}</p>
             <p className="text-xs text-warm-500">{new Date().toLocaleDateString()}</p>
           </div>
         </div>
-        <div className="text-xl font-bold text-blue-600">
+        <div className="text-xl font-extrabold text-blue-600">
           {formatDuration(todaysTotalMinutes)}
         </div>
       </div>
@@ -180,7 +180,7 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
       {/* History */}
       {historySessions.length > 0 && (
         <div className="space-y-4">
-          <h3 className="font-bold text-warm-900 flex items-center gap-2">
+          <h3 className="flex items-center gap-2 text-lg font-extrabold text-warm-900">
             <Calendar size={18} className="text-warm-500" />
             {t('sleep_history', { defaultValue: 'Історія сну' })}
           </h3>
@@ -191,9 +191,9 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
               const end = new Date(session.endTime!);
               
               return (
-                <div key={session.id} className="bg-white/50 backdrop-blur-sm border border-warm-200 rounded-xl p-4 flex items-center justify-between">
+                <div key={session.id} className="flex items-center justify-between rounded-[24px] border border-white/60 bg-white/70 p-4 backdrop-blur-sm">
                   <div>
-                    <p className="text-sm font-semibold text-warm-900">
+                    <p className="text-sm font-bold text-warm-900">
                       {start.toLocaleDateString() === new Date().toLocaleDateString() 
                         ? t('today', { defaultValue: 'Сьогодні' }) 
                         : start.toLocaleDateString()}
@@ -202,7 +202,7 @@ export const SleepTracker: React.FC<SleepTrackerProps> = ({ userState, onUpdateU
                       {start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
-                  <div className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg text-sm font-medium">
+                  <div className="rounded-xl bg-indigo-50 px-3 py-1.5 text-sm font-bold text-indigo-700">
                     {formatDuration(session.durationMinutes)}
                   </div>
                 </div>

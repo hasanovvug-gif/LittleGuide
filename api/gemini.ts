@@ -2,8 +2,10 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 export const maxDuration = 60;
 
-const getFreeAI = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '' });
-const getPaidAI = () => new GoogleGenAI({ apiKey: process.env.PAID_API_KEY || process.env.VITE_API_KEY || '' });
+const cleanEnv = (value?: string) => value?.trim() ?? '';
+
+const getFreeAI = () => new GoogleGenAI({ apiKey: cleanEnv(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY) });
+const getPaidAI = () => new GoogleGenAI({ apiKey: cleanEnv(process.env.PAID_API_KEY || process.env.VITE_API_KEY) });
 
 const getSystemInstruction = (parentName: string, childName: string, ageMonths: number, language: string) => `
 You are an empathetic, warm, and professional assistant for a parent named ${parentName} (like an experienced pediatrician or child psychologist). 

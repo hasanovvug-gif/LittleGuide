@@ -1,4 +1,6 @@
 import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut as firebaseSignOut,
   onAuthStateChanged,
@@ -10,6 +12,16 @@ export type AuthUser = User;
 
 export const signInWithGoogle = async (): Promise<AuthUser> => {
   const result = await signInWithPopup(auth, googleProvider);
+  return result.user;
+};
+
+export const signInWithEmail = async (email: string, password: string): Promise<AuthUser> => {
+  const result = await signInWithEmailAndPassword(auth, email.trim(), password);
+  return result.user;
+};
+
+export const registerWithEmail = async (email: string, password: string): Promise<AuthUser> => {
+  const result = await createUserWithEmailAndPassword(auth, email.trim(), password);
   return result.user;
 };
 

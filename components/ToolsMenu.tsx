@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, Moon, CloudLightning, ChevronRight, Puzzle, Send, Sparkles, Camera, Wand2, Settings2, CheckCircle2, Utensils, BookHeart, MessageCircleHeart, Heart, Globe, Palette, LogOut } from 'lucide-react';
+import { Trophy, Moon, CloudLightning, ChevronRight, Puzzle, Send, Sparkles, Camera, Wand2, Settings2, CheckCircle2, Utensils, BookHeart, MessageCircleHeart, Heart, Globe, Palette, LogOut, Share, Download, X } from 'lucide-react';
 import { UserState } from '../types';
 import { useTranslation } from 'react-i18next';
 
@@ -12,11 +12,50 @@ interface ToolsMenuProps {
   userEmail?: string;
 }
 
+type InstallPromptEvent = Event & {
+  prompt?: () => Promise<void>;
+  userChoice?: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+};
+
 export const ToolsMenu: React.FC<ToolsMenuProps> = ({ onNavigate, userState, onUpdateNav, onSignOut, userEmail }) => {
   const { t, i18n } = useTranslation();
   const [feedback, setFeedback] = useState('');
   const [isSent, setIsSent] = useState(false);
   const [isCustomizing, setIsCustomizing] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<InstallPromptEvent | null>(null);
+  const [showInstallCard, setShowInstallCard] = useState(false);
+  const [isIosInstallFlow, setIsIosInstallFlow] = useState(false);
+
+  useEffect(() => {
+    const standalone = window.matchMedia('(display-mode: standalone)').matches
+      || Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
+    const dismissed = window.localStorage.getItem('little-guide-install-dismissed') === '1';
+
+    if (standalone || dismissed) {
+      return;
+    }
+
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isIos = /iphone|ipad|ipod/.test(userAgent);
+    const isSafari = /safari/.test(userAgent) && !/crios|fxios|edgios/.test(userAgent);
+
+    if (isIos && isSafari) {
+      setIsIosInstallFlow(true);
+      setShowInstallCard(true);
+    }
+
+    const handleBeforeInstallPrompt = (event: Event) => {
+      event.preventDefault();
+      setInstallPrompt(event as InstallPromptEvent);
+      setShowInstallCard(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   const tools = [
     {
@@ -120,13 +159,32 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({ onNavigate, userState, onU
     i18n.changeLanguage(lng);
   };
 
+  const dismissInstallCard = () => {
+    window.localStorage.setItem('little-guide-install-dismissed', '1');
+    setShowInstallCard(false);
+  };
+
+  const handleInstall = async () => {
+    if (!installPrompt?.prompt) {
+      return;
+    }
+
+    await installPrompt.prompt();
+    await installPrompt.userChoice;
+    setInstallPrompt(null);
+    setShowInstallCard(false);
+  };
+
   return (
-    <div className="px-6 pt-8 pb-20">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-warm-900">{t('tools')}</h2>
+    <div className="px-5 pt-6 pb-20 sm:px-6 sm:pt-8">
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-warm-900">{t('tools')}</h2>
+          <p className="mt-1 text-sm text-warm-500">Сделай приложение удобнее и открой нужные разделы в один тап.</p>
+        </div>
         <button 
             onClick={() => setIsCustomizing(!isCustomizing)}
-            className={`p-2 rounded-xl transition-all flex items-center gap-2 text-xs font-bold ${isCustomizing ? 'bg-primary-500 text-white shadow-lg' : 'bg-warm-100 text-warm-500'}`}
+            className={`shrink-0 rounded-2xl px-3 py-3 text-xs font-bold transition-all flex items-center gap-2 ${isCustomizing ? 'bg-primary-500 text-white shadow-lg' : 'bg-warm-100 text-warm-500'}`}
         >
             <Settings2 size={18} />
             {isCustomizing ? t('done') : t('customize_menu')}
@@ -140,6 +198,55 @@ export const ToolsMenu: React.FC<ToolsMenuProps> = ({ onNavigate, userState, onU
         <button onClick={() => changeLanguage('ru')} className={`px-3 py-1 text-xs font-bold rounded-xl transition-colors ${i18n.language === 'ru' ? 'bg-primary-500 text-white' : 'text-warm-600 hover:bg-warm-100'}`}>РУС</button>
         <button onClick={() => changeLanguage('en')} className={`px-3 py-1 text-xs font-bold rounded-xl transition-colors ${i18n.language === 'en' ? 'bg-primary-500 text-white' : 'text-warm-600 hover:bg-warm-100'}`}>ENG</button>
       </div>
+
+      <AnimatePresence>
+        {showInstallCard && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            className="mb-6 overflow-hidden rounded-[28px] border border-white/60 bg-[linear-gradient(135deg,rgba(15,12,41,0.95),rgba(36,36,62,0.92))] p-5 text-white shadow-[0_20px_48px_rgba(15,12,41,0.22)]"
+          >
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <div className="rounded-2xl bg-white/12 p-2.5">
+                  {installPrompt ? <Download size={20} /> : <Share size={20} />}
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold">Установить как приложение</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-white/75">
+                    После установки LittleGuide будет открываться почти как отдельное приложение, без лишней панели браузера.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={dismissInstallCard}
+                className="rounded-xl p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                aria-label="Скрыть подсказку"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {isIosInstallFlow && !installPrompt ? (
+              <div className="rounded-2xl bg-white/10 p-4 text-sm leading-relaxed text-white/80">
+                В Safari нажми <span className="font-bold">Поделиться</span>, потом выбери <span className="font-bold">На экран Домой</span>.
+                После этого приложение будет запускаться отдельно и выглядеть заметно лучше на iPhone.
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleInstall}
+                className="mt-2 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-white px-4 py-3 text-sm font-extrabold text-slate-900"
+              >
+                <Download size={18} />
+                Установить приложение
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mission Card */}
       <motion.div 

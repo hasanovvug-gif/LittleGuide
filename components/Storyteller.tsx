@@ -43,20 +43,20 @@ export const Storyteller: React.FC<StorytellerProps> = ({ userState }) => {
   };
 
   return (
-    <div className="min-h-full bg-slate-900/60 backdrop-blur-xl text-slate-100 p-6 pb-20">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="bg-indigo-500/20 p-2 rounded-full">
+    <div className="min-h-full bg-slate-900/60 px-5 pb-20 pt-6 text-slate-100 backdrop-blur-xl sm:px-6">
+      <div className="mb-8 flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/20">
             <Moon className="text-indigo-300" size={24} />
         </div>
         <div>
             <h2 className="text-3xl font-serif font-bold text-indigo-100">{t('storyteller')}</h2>
-            <p className="text-xs text-indigo-400">{t('magic_before_sleep', { name: userState.childName })}</p>
+            <p className="text-sm text-indigo-400">{t('magic_before_sleep', { name: userState.childName })}</p>
         </div>
       </div>
 
       {!story ? (
         <div className="space-y-6">
-            <div className="bg-slate-800/40 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-lg">
+            <div className="rounded-[28px] border border-slate-700/50 bg-slate-800/40 p-6 shadow-lg backdrop-blur-md">
                 <label className="block text-sm font-medium text-slate-300 mb-3">
                     {t('what_happened_today')}
                 </label>
@@ -64,14 +64,14 @@ export const Storyteller: React.FC<StorytellerProps> = ({ userState }) => {
                     value={context}
                     onChange={(e) => setContext(e.target.value)}
                     placeholder={t('story_placeholder')}
-                    className="w-full h-32 bg-slate-900/50 border border-slate-700 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
+                    className="h-36 w-full resize-none rounded-[22px] border border-slate-700 bg-slate-900/50 p-4 text-[15px] text-slate-100 placeholder:text-slate-600 transition-colors focus:border-indigo-500 focus:outline-none"
                 />
             </div>
             
             <button 
                 onClick={handleGenerate}
                 disabled={loading || !context.trim()}
-                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-900/50 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] transition-transform"
+                className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-[24px] bg-gradient-to-r from-indigo-600 to-purple-600 py-4 text-base font-extrabold shadow-lg shadow-indigo-900/50 transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {loading ? (
                     <Sparkles className="animate-spin" />
@@ -83,29 +83,29 @@ export const Storyteller: React.FC<StorytellerProps> = ({ userState }) => {
                 )}
             </button>
             
-             <p className="text-xs text-center text-slate-500">
+             <p className="text-sm text-center text-slate-500">
                 {t('ai_story_desc', { name: userState.childName })}
             </p>
         </div>
       ) : (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="bg-slate-800/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
+            <div className="relative overflow-hidden rounded-[30px] border border-slate-700/50 bg-slate-800/60 p-6 shadow-xl backdrop-blur-md">
+                <div className="absolute right-0 top-0 p-4 opacity-10">
                     <BookOpen size={120} />
                 </div>
                 <div className="relative z-10">
                     {loadingImage ? (
-                      <div className="w-full h-48 bg-slate-700/50 rounded-xl mb-6 flex flex-col items-center justify-center border border-slate-600/50 animate-pulse">
+                      <div className="mb-6 flex h-48 w-full animate-pulse flex-col items-center justify-center rounded-[22px] border border-slate-600/50 bg-slate-700/50">
                         <ImageIcon className="text-slate-400 mb-2 animate-bounce" size={32} />
                         <span className="text-xs text-slate-400">{t('drawing_illustration', { defaultValue: 'Малюємо ілюстрацію...' })}</span>
                       </div>
                     ) : storyImage ? (
-                      <div className="w-full mb-6 rounded-xl overflow-hidden border border-slate-600/50 shadow-lg">
+                      <div className="mb-6 w-full overflow-hidden rounded-[22px] border border-slate-600/50 shadow-lg">
                         <img src={storyImage} alt="Story illustration" className="w-full h-auto object-cover" referrerPolicy="no-referrer" />
                       </div>
                     ) : null}
 
-                    <h3 className="text-xl font-serif text-indigo-200 mb-4 text-center">{t('story_of_today')}</h3>
+                    <h3 className="mb-4 text-center text-2xl font-serif text-indigo-200">{t('story_of_today')}</h3>
                     <div className="prose prose-invert prose-sm leading-loose text-slate-300">
                         {story.split('\n').map((para, i) => (
                             <p key={i} className="mb-4">{para}</p>
@@ -115,7 +115,7 @@ export const Storyteller: React.FC<StorytellerProps> = ({ userState }) => {
             </div>
             <button 
                 onClick={() => { setStory(''); setStoryImage(null); }}
-                className="mt-6 w-full py-3 text-slate-400 text-sm hover:text-white transition-colors"
+                className="mt-6 w-full rounded-[22px] py-3 text-sm font-bold text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
             >
                 {t('create_new_story')}
             </button>

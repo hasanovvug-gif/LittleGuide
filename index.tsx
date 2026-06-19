@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import AuthGate from './components/AuthGate';
 import './i18n';
+import './index.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -17,3 +18,11 @@ root.render(
     </AuthGate>
   </React.StrictMode>
 );
+
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.error('Service worker registration failed:', error);
+    });
+  });
+}

@@ -223,9 +223,9 @@ function App({ userId, userEmail }: AppProps) {
       case 'home':
         return (
           <>
-            <div className="px-6 pt-6 pb-0">
-              <div className="bg-white/50 backdrop-blur-sm rounded-lg p-3 text-center border border-white/50 shadow-sm">
-                <p className="text-xs font-semibold text-warm-700">✨ {t(`affirmation_${affirmationIndex + 1}`)}</p>
+            <div className="px-5 pb-0 pt-5 sm:px-6">
+              <div className="glass-card rounded-[22px] border border-white/60 p-3.5 text-center shadow-sm">
+                <p className="text-sm font-bold leading-relaxed text-warm-700">✨ {t(`affirmation_${affirmationIndex + 1}`)}</p>
               </div>
             </div>
             <DashboardSummary userState={userState} />

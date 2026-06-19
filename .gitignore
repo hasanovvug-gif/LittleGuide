@@ -31,3 +31,7 @@ dist-ssr
 # Firebase
 .firebase/
 firebase-debug.log
+.vercel
+
+# Playwright CLI debug artifacts
+.playwright-cli/

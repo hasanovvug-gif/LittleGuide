@@ -39,38 +39,47 @@ export const DashboardSummary: React.FC<{ userState: UserState }> = ({ userState
   }
 
   return (
-    <div className="px-6 mt-4 space-y-4">
+    <div className="mt-4 space-y-4 px-5 sm:px-6">
       {/* Dashboard Stats */}
       <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-3 flex flex-col items-center justify-center border border-white/50 shadow-sm text-center">
-              <Calendar size={20} className="text-blue-500 mb-1" />
-              <span className="text-[10px] font-bold text-warm-900 leading-tight">
+          <div className="glass-card rounded-[24px] border border-white/60 p-3.5 text-center shadow-sm">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-500">
+                <Calendar size={18} />
+              </div>
+              <span className="block text-[11px] font-extrabold leading-tight text-warm-900">
                   {months > 0 ? `${months} ${t('months_short')} ` : ''}{days} {t('days_short')}
               </span>
           </div>
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-3 flex flex-col items-center justify-center border border-white/50 shadow-sm text-center">
-              <Flame size={20} className="text-orange-500 mb-1" />
-              <span className="text-[10px] font-bold text-warm-900 leading-tight">
+          <div className="glass-card rounded-[24px] border border-white/60 p-3.5 text-center shadow-sm">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl bg-orange-50 text-orange-500">
+                <Flame size={18} />
+              </div>
+              <span className="block text-[11px] font-extrabold leading-tight text-warm-900">
                   {userState.streakCount || 0} {t('days_streak')}
               </span>
           </div>
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-3 flex flex-col items-center justify-center border border-white/50 shadow-sm text-center">
-              {isStormy ? <CloudLightning size={20} className="text-indigo-500 mb-1" /> : <Sun size={20} className="text-yellow-500 mb-1" />}
-              <span className="text-[10px] font-bold text-warm-900 leading-tight">
+          <div className="glass-card rounded-[24px] border border-white/60 p-3.5 text-center shadow-sm">
+              <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-2xl ${isStormy ? 'bg-indigo-50 text-indigo-500' : 'bg-yellow-50 text-yellow-500'}`}>
+                {isStormy ? <CloudLightning size={18} /> : <Sun size={18} />}
+              </div>
+              <span className="block text-[11px] font-extrabold leading-tight text-warm-900">
                   {isStormy ? t('leap_storm') : t('leap_sunny')}
               </span>
           </div>
       </div>
 
       {/* Milestone Alert */}
-      <div className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-2xl p-4 border border-white/50 shadow-sm flex items-start gap-3">
-          <div className="bg-white/80 p-2 rounded-full text-orange-500 shrink-0">
+      <div className="overflow-hidden rounded-[28px] border border-white/60 bg-[linear-gradient(135deg,rgba(254,243,199,0.92),rgba(255,237,213,0.92))] p-4 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/80 text-orange-500 shadow-sm">
               <Target size={20} />
           </div>
-          <div>
-              <h4 className="font-bold text-orange-900 text-sm">{milestone.title}</h4>
-              <p className="text-xs text-orange-800 mt-1 leading-relaxed">{milestone.desc}</p>
+          <div className="min-w-0">
+              <div className="mb-1 text-[11px] font-black uppercase tracking-[0.22em] text-orange-500">Фокус дня</div>
+              <h4 className="text-base font-extrabold text-orange-900">{milestone.title}</h4>
+              <p className="mt-1 text-sm leading-relaxed text-orange-800">{milestone.desc}</p>
           </div>
+        </div>
       </div>
     </div>
   );

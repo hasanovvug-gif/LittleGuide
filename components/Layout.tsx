@@ -119,8 +119,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
   const ThemeIcon = ALL_NAV_ITEMS[activeTab]?.icon || ALL_NAV_ITEMS['home'].icon;
 
   return (
-    <div className="min-h-screen bg-warm-50 text-warm-900 font-sans pb-24 relative overflow-hidden">
-      <div className="max-w-md mx-auto min-h-screen shadow-2xl overflow-hidden relative bg-warm-50">
+    <div className="app-shell bg-warm-50 text-warm-900 font-sans relative overflow-hidden">
+      <div className="app-frame relative overflow-hidden bg-warm-50 md:my-4 md:rounded-[32px] md:border md:border-white/50 md:shadow-2xl">
          
          {/* Dynamic Background */}
          <AnimatePresence mode="wait">
@@ -170,12 +170,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
          </AnimatePresence>
          
         {/* Content Area */}
-        <main className="relative z-10 h-full overflow-y-auto no-scrollbar pb-24">
+        <main className="app-scroll no-scrollbar relative z-10">
           {children}
         </main>
 
         {/* Bottom Navigation */}
-        <nav className="absolute bottom-0 left-0 w-full bg-white/70 backdrop-blur-xl border-t border-white/50 py-3 px-2 flex justify-between items-center z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <nav className="app-bottom-nav absolute bottom-0 left-0 w-full z-50">
+          <div className="glass-card mx-auto grid grid-cols-5 gap-1 rounded-[28px] border border-white/60 p-2 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
           {navIds.map((id) => {
             const itemConfig = ALL_NAV_ITEMS[id] || ALL_NAV_ITEMS['menu'];
             const Icon = itemConfig.icon;
@@ -189,26 +190,27 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange
                 key={id}
                 onClick={() => onTabChange(id)}
                 whileTap={{ scale: 0.9 }}
-                className={`flex flex-col items-center gap-1 transition-all duration-300 w-1/5 ${
+                className={`relative flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-[22px] px-1.5 py-2 transition-all duration-300 ${
                   isActive ? 'text-primary-600' : 'text-warm-400 hover:text-warm-600'
                 }`}
               >
-                <div className="relative p-2 rounded-2xl transition-colors">
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-2xl transition-colors">
                     {isActive && (
                       <motion.div 
                         layoutId="activeTabIndicator"
-                        className="absolute inset-0 bg-primary-50/80 rounded-2xl"
+                        className="absolute inset-0 rounded-2xl bg-primary-50/90 shadow-sm"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
                     )}
                     <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className="relative z-10" />
                 </div>
-                <span className={`text-[9px] font-bold tracking-tight text-center truncate w-full ${isActive ? 'text-primary-700' : 'text-warm-400'}`}>
+                <span className={`w-full truncate text-center text-[10px] font-extrabold tracking-tight ${isActive ? 'text-primary-700' : 'text-warm-500'}`}>
                     {itemConfig.label}
                 </span>
               </motion.button>
             );
           })}
+          </div>
         </nav>
       </div>
     </div>

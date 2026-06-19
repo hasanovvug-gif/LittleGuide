@@ -41,8 +41,14 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-warm-50 to-primary-50 flex items-center justify-center p-6 font-sans">
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-8 relative overflow-hidden border border-white/50">
+    <div className="relative min-h-[100dvh] overflow-hidden bg-[radial-gradient(circle_at_top,#ffffff_0%,#f1eee8_40%,#e9f3e7_100%)] px-4 pb-[max(24px,var(--safe-bottom))] pt-[max(18px,var(--safe-top))] font-sans sm:px-6">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-12 right-0 h-40 w-40 rounded-full bg-primary-200/50 blur-3xl" />
+        <div className="absolute bottom-16 left-0 h-44 w-44 rounded-full bg-orange-100/60 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto flex min-h-[calc(100dvh-var(--safe-top)-var(--safe-bottom)-42px)] w-full max-w-md items-center">
+      <div className="glass-card w-full rounded-[30px] border border-white/60 p-6 shadow-xl sm:p-8 relative overflow-hidden">
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 w-full h-2 bg-warm-100">
             <div 
@@ -59,7 +65,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     transition={{ duration: 0.2 }}
-                    className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 text-primary-600"
+                    className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-100 text-primary-600 shadow-sm"
                 >
                     {step === 1 && <User size={32} />}
                     {step === 2 && <Baby size={32} />}
@@ -73,7 +79,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="text-2xl font-bold text-warm-900 mb-2"
+                    className="mb-2 text-3xl font-bold text-warm-900"
                 >
                     {step === 1 && t('onboarding_step1_title')}
                     {step === 2 && t('onboarding_step2_title')}
@@ -87,7 +93,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className="text-warm-500 text-sm"
+                    className="mx-auto max-w-[260px] text-sm leading-relaxed text-warm-500"
                 >
                     {step === 1 && t('onboarding_step1_desc')}
                     {step === 2 && t('onboarding_step2_desc')}
@@ -111,7 +117,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                             value={formData.parentName}
                             onChange={(e) => setFormData({...formData, parentName: e.target.value})}
                             placeholder={t('onboarding_parent_name_placeholder')}
-                            className="w-full text-center text-xl border-b-2 border-warm-200 py-2 focus:outline-none focus:border-primary-500 bg-transparent placeholder-warm-300 text-warm-800 transition-colors"
+                            className="w-full rounded-[24px] border border-warm-200 bg-white/80 px-5 py-4 text-center text-lg font-semibold text-warm-800 shadow-sm transition-colors placeholder:text-warm-300 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100"
                             autoFocus
                         />
                     )}
@@ -122,7 +128,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                             value={formData.childName}
                             onChange={(e) => setFormData({...formData, childName: e.target.value})}
                             placeholder={t('onboarding_child_name_placeholder')}
-                            className="w-full text-center text-xl border-b-2 border-warm-200 py-2 focus:outline-none focus:border-primary-500 bg-transparent placeholder-warm-300 text-warm-800 transition-colors"
+                            className="w-full rounded-[24px] border border-warm-200 bg-white/80 px-5 py-4 text-center text-lg font-semibold text-warm-800 shadow-sm transition-colors placeholder:text-warm-300 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100"
                             autoFocus
                         />
                     )}
@@ -132,7 +138,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                             type="date"
                             value={formData.childBirthDate}
                             onChange={(e) => setFormData({...formData, childBirthDate: e.target.value})}
-                            className="w-full text-center text-xl border-b-2 border-warm-200 py-2 focus:outline-none focus:border-primary-500 bg-transparent text-warm-800 transition-colors"
+                            className="w-full rounded-[24px] border border-warm-200 bg-white/80 px-5 py-4 text-center text-lg font-semibold text-warm-800 shadow-sm transition-colors focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100"
                             max={new Date().toISOString().split('T')[0]}
                         />
                     )}
@@ -143,7 +149,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 whileTap={isStepValid() ? { scale: 0.95 } : {}}
                 onClick={handleNext}
                 disabled={!isStepValid()}
-                className="w-full py-4 bg-warm-900 text-white rounded-xl font-bold shadow-lg shadow-warm-900/20 disabled:opacity-50 disabled:scale-95 transition-all flex items-center justify-center gap-2 group"
+                className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-[24px] bg-warm-900 px-5 py-4 text-base font-bold text-white shadow-lg shadow-warm-900/20 transition-all disabled:scale-95 disabled:opacity-50 group"
             >
                 {step === 3 ? (
                     <>
@@ -156,6 +162,7 @@ export const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 )}
             </motion.button>
         </div>
+      </div>
       </div>
     </div>
   );

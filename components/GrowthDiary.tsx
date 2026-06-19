@@ -163,31 +163,31 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
   const filteredEntries = entries.filter(e => activeTab === 'audio' ? e.type === 'audio' : e.type !== 'audio');
 
   return (
-    <div className="px-6 pt-8 pb-20">
-      <div className="flex items-center justify-between mb-6">
+    <div className="px-5 pt-6 pb-20 sm:px-6">
+      <div className="mb-6 flex items-center justify-between">
          <div>
             <h2 className="text-3xl font-handwriting font-bold text-warm-900">{t('diary')}</h2>
-            <p className="text-xs text-warm-500">{t('moments_unforgettable')}</p>
+            <p className="text-sm text-warm-500">{t('moments_unforgettable')}</p>
          </div>
          <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-warm-900 text-white p-3 rounded-full shadow-lg shadow-warm-900/20 active:scale-95 transition-transform"
+            className="flex h-12 w-12 items-center justify-center rounded-2xl bg-warm-900 text-white shadow-lg shadow-warm-900/20 transition-transform active:scale-95"
          >
-            <Plus size={24} />
+            <Plus size={22} />
          </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex p-1 bg-warm-100/50 backdrop-blur-md rounded-xl mb-8 border border-white/50 shadow-sm">
+      <div className="mb-8 flex rounded-[22px] border border-white/50 bg-warm-100/50 p-1.5 shadow-sm backdrop-blur-md">
         <button 
             onClick={() => setActiveTab('text')}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'text' ? 'bg-white/80 backdrop-blur-sm text-warm-900 shadow-sm' : 'text-warm-500'}`}
+            className={`flex-1 rounded-[18px] py-3 text-sm font-extrabold transition-all ${activeTab === 'text' ? 'bg-white/80 text-warm-900 shadow-sm backdrop-blur-sm' : 'text-warm-500'}`}
         >
             {t('notes')}
         </button>
         <button 
             onClick={() => setActiveTab('audio')}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${activeTab === 'audio' ? 'bg-white/80 backdrop-blur-sm text-primary-600 shadow-sm' : 'text-warm-500'}`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-[18px] py-3 text-sm font-extrabold transition-all ${activeTab === 'audio' ? 'bg-white/80 text-primary-600 shadow-sm backdrop-blur-sm' : 'text-warm-500'}`}
         >
             <Mic size={14} />
             {t('audio_capsules')}
@@ -196,25 +196,25 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
 
       {activeTab === 'audio' && (
          <div className="mb-8">
-            <div className={`rounded-2xl p-6 flex flex-col items-center justify-center transition-all backdrop-blur-md ${isRecording ? 'bg-red-50/70 border border-red-100/50' : 'bg-primary-50/70 border border-primary-100/50 border-dashed'}`}>
+            <div className={`flex flex-col items-center justify-center rounded-[28px] p-6 transition-all backdrop-blur-md ${isRecording ? 'border border-red-100/50 bg-red-50/70' : 'border border-dashed border-primary-100/60 bg-primary-50/70'}`}>
                 {isRecording ? (
                     <>
-                        <div className="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center animate-pulse mb-4 shadow-lg shadow-red-200">
+                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-[22px] bg-red-500 shadow-lg shadow-red-200 animate-pulse">
                              <Mic size={32} className="text-white" />
                         </div>
                         <h3 className="font-bold text-red-900 mb-1">{t('recording')} 0:{recordingTime < 10 ? '0' + recordingTime : recordingTime}</h3>
-                        <p className="text-xs text-red-400 mb-4">{t('catching_first_sounds')}</p>
-                        <button onClick={stopRecording} className="px-6 py-2 bg-white text-red-500 font-bold rounded-full shadow-sm text-sm">
+                        <p className="mb-4 text-sm text-red-400">{t('catching_first_sounds')}</p>
+                        <button onClick={stopRecording} className="rounded-full bg-white px-6 py-2.5 text-sm font-bold text-red-500 shadow-sm">
                             {t('stop')}
                         </button>
                     </>
                 ) : (
                     <>
-                        <button onClick={startRecording} className="w-16 h-16 rounded-full bg-primary-500 flex items-center justify-center mb-4 shadow-lg shadow-primary-200 hover:scale-105 transition-transform">
+                        <button onClick={startRecording} className="mb-4 flex h-16 w-16 items-center justify-center rounded-[22px] bg-primary-500 shadow-lg shadow-primary-200 transition-transform hover:scale-105">
                              <Mic size={32} className="text-white" />
                         </button>
                         <h3 className="font-bold text-primary-900 mb-1">{t('record_sound')}</h3>
-                        <p className="text-xs text-primary-400 text-center max-w-[200px]">
+                        <p className="max-w-[220px] text-center text-sm text-primary-400">
                             {t('first_sounds_desc')}
                         </p>
                     </>
@@ -223,7 +223,7 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
          </div>
       )}
 
-      <div className="space-y-8 relative">
+      <div className="relative space-y-8">
         {/* Timeline Line */}
         <div className="absolute left-4 top-4 bottom-0 w-0.5 bg-warm-200" />
 
@@ -234,13 +234,13 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
         )}
 
         {filteredEntries.map((entry) => (
-            <div key={entry.id} className="relative pl-12 group">
+            <div key={entry.id} className="group relative pl-12">
                 {/* Timeline Dot */}
                 <div className={`absolute left-[11px] top-6 w-3 h-3 bg-white border-2 rounded-full z-10 shadow-sm group-hover:scale-125 transition-transform ${entry.type === 'audio' ? 'border-primary-400' : entry.type === 'summary' ? 'border-purple-400' : 'border-warm-400'}`} />
                 
                 <span className="text-xs font-bold text-warm-400 uppercase tracking-wider mb-2 block">{entry.date}</span>
                 
-                <div className={`bg-white/70 backdrop-blur-md p-5 rounded-2xl shadow-sm border hover:shadow-md transition-shadow ${entry.type === 'summary' ? 'border-purple-200 bg-purple-50/50' : 'border-white/50'}`}>
+                <div className={`rounded-[26px] border p-5 shadow-sm transition-shadow hover:shadow-md backdrop-blur-md ${entry.type === 'summary' ? 'border-purple-200 bg-purple-50/50' : 'border-white/50 bg-white/75'}`}>
                     <div className="flex items-start gap-3 mb-2">
                         {entry.type === 'achievement' && <Star size={16} className="text-yellow-500 mt-1" />}
                         {entry.type === 'quote' && <Quote size={16} className="text-orange-400 mt-1" />}
@@ -249,7 +249,7 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
                         {entry.type === 'audio' && (
                           <button 
                             onClick={() => entry.audioUrl && togglePlay(entry.audioUrl, entry.id)}
-                            className="bg-primary-100 p-2 rounded-full hover:bg-primary-200 transition-colors"
+                            className="rounded-2xl bg-primary-100 p-2.5 transition-colors hover:bg-primary-200"
                           >
                             {playingId === entry.id ? <Pause size={16} className="text-primary-600" /> : <Play size={16} className="text-primary-600 ml-0.5" />}
                           </button>
@@ -257,13 +257,13 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
                         
                         <div className="flex-1">
                             {entry.imageUrl && (
-                              <img src={entry.imageUrl} alt="Diary entry" className="w-full h-48 object-cover rounded-xl mb-3" />
+                              <img src={entry.imageUrl} alt="Diary entry" className="mb-3 h-48 w-full rounded-2xl object-cover" />
                             )}
                             <p className={`${entry.type === 'summary' ? 'text-purple-900 font-medium' : 'text-warm-800 font-medium'} leading-relaxed whitespace-pre-wrap`}>
                               {entry.content}
                             </p>
                             {entry.type === 'audio' && (
-                                <div className="mt-2 h-8 bg-warm-100 rounded-full w-full flex items-center px-3 gap-2">
+                                <div className="mt-2 flex h-8 w-full items-center gap-2 rounded-full bg-warm-100 px-3">
                                      <span className="text-[10px] font-mono text-warm-500">{entry.duration}</span>
                                      <div className="flex-1 h-1 bg-warm-300 rounded-full overflow-hidden relative">
                                         {playingId === entry.id && (
@@ -294,7 +294,7 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
         
         {activeTab === 'text' && (
             <div className="relative pl-12 mt-8">
-                <div className="bg-gradient-to-r from-primary-500/90 to-primary-600/90 backdrop-blur-md rounded-2xl p-6 text-white shadow-lg shadow-primary-500/30 border border-white/20">
+                <div className="rounded-[28px] border border-white/20 bg-gradient-to-r from-primary-500/90 to-primary-600/90 p-6 text-white shadow-lg shadow-primary-500/30 backdrop-blur-md">
                     <div className="flex justify-between items-start mb-4">
                         <h3 className="font-bold text-lg">{t('month_summary')}</h3>
                         <Star size={20} className="text-primary-100" />
@@ -305,7 +305,7 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
                     <button 
                       onClick={handleGenerateSummary}
                       disabled={isGeneratingSummary || entries.filter(e => e.type !== 'audio' && e.type !== 'summary').length === 0}
-                      className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm py-2 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                      className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-white/20 py-2 text-sm font-semibold transition-colors backdrop-blur-sm hover:bg-white/30 disabled:opacity-50"
                     >
                         {isGeneratingSummary ? <Loader2 size={16} className="animate-spin" /> : null}
                         {isGeneratingSummary ? t('generating_summary') : t('reply')}
@@ -329,11 +329,11 @@ export const GrowthDiary: React.FC<GrowthDiaryProps> = ({ userState, onUpdateUse
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl"
+              className="w-full max-w-md rounded-[32px] bg-white p-6 pb-[calc(24px+var(--safe-bottom))] shadow-2xl"
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold text-warm-900">{t('add_entry')}</h3>
-                <button onClick={() => setIsModalOpen(false)} className="p-2 bg-warm-100 rounded-full text-warm-500">
+                <button onClick={() => setIsModalOpen(false)} className="rounded-2xl bg-warm-100 p-2.5 text-warm-500">
                   <X size={20} />
                 </button>
               </div>

@@ -61,31 +61,31 @@ export const MagicPhoto: React.FC = () => {
   };
 
   return (
-    <div className="min-h-full text-slate-900 p-6 pb-20">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="bg-gradient-to-tr from-violet-500 to-fuchsia-500 p-2 rounded-full text-white shadow-lg">
+    <div className="min-h-full p-5 pb-20 pt-6 text-slate-900 sm:px-6">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-violet-500 to-fuchsia-500 text-white shadow-lg">
             <Wand2 size={24} />
         </div>
         <div>
-            <h2 className="text-2xl font-bold text-slate-900">{t('magic_photo_title')}</h2>
-            <p className="text-xs text-slate-500">{t('magic_photo_subtitle')}</p>
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">{t('magic_photo_title')}</h2>
+            <p className="text-sm text-slate-500">{t('magic_photo_subtitle')}</p>
         </div>
       </div>
 
       {!selectedImage ? (
-        <div className="flex flex-col items-center justify-center h-[60vh] border-2 border-dashed border-white/60 rounded-3xl bg-white/40 backdrop-blur-md p-8 text-center space-y-4 shadow-sm">
-            <div className="bg-slate-100 p-6 rounded-full">
+        <div className="flex h-[60vh] flex-col items-center justify-center space-y-4 rounded-[32px] border-2 border-dashed border-white/60 bg-white/45 p-8 text-center shadow-sm backdrop-blur-md">
+            <div className="rounded-[28px] bg-slate-100 p-6">
                 <Camera size={48} className="text-slate-400" />
             </div>
             <div>
-                <h3 className="text-lg font-bold text-slate-700">{t('magic_upload_photo')}</h3>
-                <p className="text-sm text-slate-400 mt-1 max-w-[200px] mx-auto">
+                <h3 className="text-xl font-extrabold text-slate-700">{t('magic_upload_photo')}</h3>
+                <p className="mx-auto mt-1 max-w-[220px] text-sm leading-relaxed text-slate-400">
                     {t('upload_photo_desc')}
                 </p>
             </div>
             <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
+                className="flex min-h-[56px] items-center gap-2 rounded-[22px] bg-slate-900 px-8 py-3 text-base font-extrabold text-white shadow-lg transition-transform hover:scale-105"
             >
                 <Upload size={18} />
                 {t('choose_from_gallery')}
@@ -101,7 +101,7 @@ export const MagicPhoto: React.FC = () => {
       ) : (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Image Preview Area */}
-            <div className="relative rounded-2xl overflow-hidden shadow-xl bg-white/50 backdrop-blur-sm border border-white/50 aspect-square">
+            <div className="relative aspect-square overflow-hidden rounded-[28px] border border-white/50 bg-white/50 shadow-xl backdrop-blur-sm">
                 {isProcessing && (
                     <div className="absolute inset-0 z-20 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center text-white">
                         <Sparkles className="animate-spin mb-4 text-fuchsia-400" size={48} />
@@ -118,7 +118,7 @@ export const MagicPhoto: React.FC = () => {
                 {!isProcessing && (
                     <button 
                         onClick={handleReset}
-                        className="absolute top-4 right-4 bg-white/80 p-2 rounded-full text-slate-700 shadow-sm hover:bg-white transition-colors z-30"
+                        className="absolute right-4 top-4 z-30 rounded-2xl bg-white/80 p-2.5 text-slate-700 shadow-sm transition-colors hover:bg-white"
                     >
                         <X size={20} />
                     </button>
@@ -128,19 +128,19 @@ export const MagicPhoto: React.FC = () => {
             {/* Controls */}
             {!resultImage && (
                 <div className="space-y-4">
-                    <h3 className="font-bold text-slate-800">{t('choose_style')}</h3>
+                    <h3 className="text-lg font-extrabold text-slate-800">{t('choose_style')}</h3>
                     <div className="grid grid-cols-2 gap-3">
                         {STYLES.map((style) => (
                             <button
                                 key={style.id}
                                 onClick={() => setSelectedStyle(style.id)}
-                                className={`p-3 rounded-xl border text-left transition-all ${
+                                className={`rounded-[22px] border p-3 text-left transition-all ${
                                     selectedStyle === style.id 
                                     ? 'border-violet-400 bg-violet-50/80 shadow-md ring-1 ring-violet-400' 
                                     : 'border-white/60 bg-white/50 hover:border-violet-300 hover:bg-white/70'
                                 }`}
                             >
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${style.color}`}>
+                                <span className={`rounded-full px-2.5 py-1 text-[10px] font-black ${style.color}`}>
                                     {style.label}
                                 </span>
                             </button>
@@ -150,7 +150,7 @@ export const MagicPhoto: React.FC = () => {
                     <button
                         onClick={handleGenerate}
                         disabled={!selectedStyle || isProcessing}
-                        className="w-full py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl font-bold shadow-lg shadow-violet-200 disabled:opacity-50 disabled:scale-95 active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-[22px] bg-gradient-to-r from-violet-600 to-fuchsia-600 py-4 text-base font-extrabold text-white shadow-lg shadow-violet-200 transition-all active:scale-95 disabled:scale-95 disabled:opacity-50"
                     >
                         <Sparkles size={20} />
                         {t('create_magic_btn')}
@@ -164,14 +164,14 @@ export const MagicPhoto: React.FC = () => {
                     <a 
                         href={resultImage} 
                         download="magic-baby.png"
-                        className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg"
+                        className="flex min-h-[54px] flex-1 items-center justify-center gap-2 rounded-[22px] bg-slate-900 py-3 text-sm font-extrabold text-white shadow-lg"
                     >
                         <Download size={18} />
                         {t('download')}
                     </a>
                     <button 
                         onClick={() => setResultImage(null)}
-                        className="px-4 py-3 bg-white/70 backdrop-blur-md border border-white/80 text-slate-700 rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm hover:bg-white/90 transition-colors"
+                        className="flex min-h-[54px] items-center justify-center gap-2 rounded-[22px] border border-white/80 bg-white/70 px-4 py-3 text-slate-700 shadow-sm transition-colors hover:bg-white/90 backdrop-blur-md"
                     >
                         <RefreshCw size={18} />
                     </button>
