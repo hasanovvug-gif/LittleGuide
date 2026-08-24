@@ -4,6 +4,16 @@ import { activities as ruActivities } from './ru/activities';
 import { leaps as ruLeaps, stormNote as ruStormNote } from './ru/leaps';
 import { questions as ruQuestions } from './ru/questions';
 import { bundledStories as ruStories } from './ru/stories';
+import { weeks as uaWeeks } from './ua/weeks';
+import { activities as uaActivities } from './ua/activities';
+import { leaps as uaLeaps, stormNote as uaStormNote } from './ua/leaps';
+import { questions as uaQuestions } from './ua/questions';
+import { bundledStories as uaStories } from './ua/stories';
+import { weeks as enWeeks } from './en/weeks';
+import { activities as enActivities } from './en/activities';
+import { leaps as enLeaps, stormNote as enStormNote } from './en/leaps';
+import { questions as enQuestions } from './en/questions';
+import { bundledStories as enStories } from './en/stories';
 
 type Pack = {
   weeks: WeekEntry[];
@@ -23,9 +33,25 @@ const ru: Pack = {
   stormNote: ruStormNote,
 };
 
-// ⚠️ ua и en пока указывают на ru — переводы контент-паков остаток этапа 2.
-// UI-строки при этом переведены полностью (см. i18n/).
-const packs: Record<Lang, Pack> = { ru, ua: ru, en: ru };
+const ua: Pack = {
+  weeks: uaWeeks,
+  activities: uaActivities,
+  leaps: uaLeaps,
+  questions: uaQuestions,
+  stories: uaStories,
+  stormNote: uaStormNote,
+};
+
+const en: Pack = {
+  weeks: enWeeks,
+  activities: enActivities,
+  leaps: enLeaps,
+  questions: enQuestions,
+  stories: enStories,
+  stormNote: enStormNote,
+};
+
+const packs: Record<Lang, Pack> = { ru, ua, en };
 
 export function pack(lang: Lang): Pack {
   return packs[lang] ?? ru;

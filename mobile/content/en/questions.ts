@@ -1,0 +1,28 @@
+import type { CapsuleQuestion } from '../types';
+
+export const questions: CapsuleQuestion[] = [
+  { id: 'q01', text: 'What has {name} learnt to do recently?' },
+  { id: 'q02', text: 'Which sound does {name} love most?' },
+  { id: 'q03', text: 'What made him laugh this week?' },
+  { id: 'q04', text: 'What is he a little wary of just now?' },
+  { id: 'q05', text: 'How does he show that he is happy to see you?' },
+  { id: 'q06', text: 'What food has become a favourite?' },
+  { id: 'q07', text: 'What could he look at for the longest?' },
+  { id: 'q08', text: 'How does he settle most quickly?' },
+  { id: 'q09', text: 'What has changed in him this month?' },
+  { id: 'q10', text: 'What is his favourite game right now?' },
+  { id: 'q11', text: 'Who does he look like today?' },
+  { id: 'q12', text: 'What does he do when he is very pleased with something?' },
+  { id: 'q13', text: 'Which thing at home interests him most?' },
+  { id: 'q14', text: 'What was hardest this week?' },
+  { id: 'q15', text: 'What did he learn sooner than you expected?' },
+  { id: 'q16', text: 'What does his laughter sound like?' },
+  { id: 'q17', text: 'What does he do when he is tired?' },
+  { id: 'q18', text: 'Which place at home does he choose for himself?' },
+  { id: 'q19', text: 'What is new in his character?' },
+  { id: 'q20', text: 'What are you grateful for this week?' },
+  { id: 'q21', text: 'What would you like to remember from these particular days?' },
+  { id: 'q22', text: 'How does he greet people he knows?' },
+  { id: 'q23', text: 'What can he do by himself, without you?' },
+  { id: 'q24', text: 'Which moment from this week would you watch again?' },
+];
