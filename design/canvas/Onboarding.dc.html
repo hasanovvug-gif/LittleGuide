@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Nunito', system-ui, sans-serif; }
+    a { color: #336633; } a:hover { color: #448844; }
+  </style>
+</helmet>
+
+<div style="width: 393px; height: 852px; position: relative; overflow: hidden; background: radial-gradient(circle at top, #ffffff 0%, #f1eee8 40%, #e9f3e7 100%); color: #44403c;">
+
+  <div style="position: absolute; top: -48px; right: -20px; width: 200px; height: 200px; border-radius: 50%; background: rgba(197,226,197,0.5); filter: blur(48px); pointer-events: none;"></div>
+  <div style="position: absolute; bottom: 120px; left: -40px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,237,213,0.6); filter: blur(48px); pointer-events: none;"></div>
+
+  <div style="position: relative; height: 100%; display: flex; flex-direction: column; padding: 68px 26px 40px 26px;">
+
+    <div style="display: flex; gap: 8px; margin-bottom: 48px;">
+      <div style="height: 5px; flex-grow: 1; border-radius: 999px; background: #336633;"></div>
+      <div style="height: 5px; flex-grow: 1; border-radius: 999px; background: #336633;"></div>
+      <div style="height: 5px; flex-grow: 1; border-radius: 999px; background: rgba(51,102,51,0.16);"></div>
+    </div>
+
+    <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 0;">
+
+      <div style="width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; border-radius: 26px; background: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.9); box-shadow: 0 16px 40px rgba(15,12,41,0.10); color: #448844; margin-bottom: 30px;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01M15 12h.01"/><path d="M10 16c.5.4 1.2.6 2 .6s1.5-.2 2-.6"/><circle cx="12" cy="12" r="9"/></svg>
+      </div>
+
+      <p style="margin: 0 0 10px 0; font-family: 'Caveat', cursive; font-size: 26px; font-weight: 600; color: #66aa66;">Шаг 2 из 3</p>
+
+      <h1 style="margin: 0 0 14px 0; font-family: 'Playfair Display', Georgia, serif; font-size: 38px; font-weight: 700; line-height: 1.12; letter-spacing: -0.01em; color: #44403c;">Как зовут вашего малыша?</h1>
+
+      <p style="margin: 0 0 38px 0; font-size: 16px; line-height: 1.6; color: #78716c;">Имя будет появляться в советах и сказках — чтобы они звучали не про «ребёнка вообще», а про вашего.</p>
+
+      <div style="border-radius: 26px; border: 1px solid rgba(255,255,255,0.9); background: rgba(255,255,255,0.78); box-shadow: 0 20px 60px rgba(15,12,41,0.10); padding: 6px 20px; display: flex; align-items: center; gap: 14px; min-height: 68px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span style="font-size: 19px; font-weight: 700; color: #44403c;">Ева</span>
+        <span style="width: 2px; height: 24px; background: #98ca98; border-radius: 2px; margin-left: -6px;"></span>
+      </div>
+
+    </div>
+
+    <button style="width: 100%; min-height: 60px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; border-radius: 26px; background: #336633; color: #ffffff; font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 800; cursor: pointer; box-shadow: 0 14px 30px rgba(51,102,51,0.28);">
+      Дальше
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+    </button>
+
+    <p style="margin: 16px 0 0 0; text-align: center; font-size: 12px; line-height: 1.5; color: #a8a29e;">Всё, что вы вводите, остаётся на этом телефоне.</p>
+
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
