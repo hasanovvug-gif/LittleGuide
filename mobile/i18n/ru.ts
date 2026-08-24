@@ -1,0 +1,92 @@
+export const ru = {
+  tabs: { today: 'Сегодня', rhythm: 'Ритм', diary: 'Дневник', story: 'Сказка' },
+
+  onboarding: {
+    title: 'Год за руку',
+    subtitle: 'Приложение знает, сколько ребёнку недель, и подсказывает, что происходит с ним сейчас.',
+    nameLabel: 'Как зовут ребёнка',
+    namePlaceholder: 'Имя',
+    birthLabel: 'Дата рождения',
+    localOnly: 'Всё остаётся на этом телефоне. Аккаунт не нужен.',
+    start: 'Начать',
+  },
+
+  today: {
+    weekLabel: 'НЕДЕЛЯ',
+    activityLabel: 'СЕГОДНЯ',
+    minutes: 'МИН',
+    why: 'Почему это работает',
+    done: 'Сделали',
+    doneMark: 'Отмечено',
+    another: 'Дай другую игру',
+    markedDays: 'отмеченных дней',
+    weather: { calm: 'Спокойная неделя', cloudy: 'Может быть беспокойнее', storm: 'Неделя скачка' },
+  },
+
+  rhythm: {
+    title: 'Ритм',
+    sleep: 'Сон',
+    feeding: 'Кормление',
+    running: 'идёт',
+    startSleep: 'Уснул',
+    stopSleep: 'Проснулся',
+    startFeeding: 'Начали кормить',
+    stopFeeding: 'Закончили',
+    lastFeeding: 'последнее',
+    ago: 'назад',
+    noFeeding: 'сегодня ещё не отмечали',
+    todayLabel: 'СЕГОДНЯ',
+    summarySleep: 'спал',
+    summaryFeedings: 'кормлений',
+    empty: 'Сегодня записей пока нет.',
+  },
+
+  diary: {
+    title: 'Дневник',
+    questionLabel: 'ВОПРОС НЕДЕЛИ',
+    answer: 'Ответить',
+    answered: 'Ответ сохранён',
+    add: 'Запись',
+    placeholder: 'Что запомнилось сегодня',
+    save: 'Сохранить',
+    skip: 'Пропустить эту неделю',
+    capsuleHint: 'Одна строка. Через месяц четыре ответа сложатся в срез, который приятно перечитать.',
+    capsuleCounter: 'ВОПРОС {n} ИЗ 4',
+    monthSlice: 'СРЕЗ',
+    answersCount: 'ответа',
+    entriesCount: 'записей',
+    empty: 'Здесь появятся отмеченные активности и ваши записи.',
+  },
+
+  story: {
+    title: 'Сказка на ночь',
+    dayLabel: 'ЧТО БЫЛО СЕГОДНЯ',
+    placeholder: 'Гуляли в парке, видели большую собаку, ели кашу',
+    chips: ['Гуляли', 'Купались', 'Были у бабушки', 'Новая еда'],
+    generate: 'Сочинить сказку',
+    offlineHint: 'Без интернета — читайте готовые сказки ниже.',
+    library: 'БИБЛИОТЕКА',
+    minutes: 'мин',
+    aiMark: 'Сочинено ИИ',
+    report: 'Пожаловаться',
+    hard: 'Мне тяжело',
+    breathing: 'Две минуты дыхания',
+  },
+
+  settings: {
+    title: 'Настройки',
+    theme: 'Тема',
+    themeAuto: 'Как в системе',
+    themeDay: 'Мягкий свет',
+    themeNight: 'Тихая ночь',
+    language: 'Язык',
+    export: 'Сохранить копию данных',
+    import: 'Восстановить из файла',
+    child: 'Ребёнок',
+    about: 'О приложении',
+  },
+
+  common: { cancel: 'Отмена', close: 'Закрыть', ok: 'Хорошо', hours: 'ч', minutesShort: 'мин' },
+};
+
+export type Dict = typeof ru;
