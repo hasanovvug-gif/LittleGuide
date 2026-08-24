@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Manrope:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: Manrope, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #E0A264; } a:hover { color: #EFBB86; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.1em; font-weight: 600; }
+    .serif { font-family: Newsreader, Georgia, serif; font-weight: 400; }
+  </style>
+</helmet>
+<div style="width: 393px; height: 852px; background: #0F1115; color: #EDE8E0; position: relative; overflow: hidden;">
+
+  <div style="padding: 62px 26px 0; display: flex; flex-direction: column; gap: 24px;">
+
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <div style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; color: #6C7280;">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"></path></svg>
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #6C7280;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v9"></path><path d="M8.5 9.5L12 13l3.5-3.5"></path><path d="M5 17v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2"></path></svg>
+        </div>
+        <div style="width: 44px; height: 44px; margin-right: -12px; display: flex; align-items: center; justify-content: center; color: #6C7280;">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21V5a1 1 0 0 1 1-1h9l-1.5 4L17 12H8"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="eyebrow" style="color: #5A6069;">СЕГОДНЯ · 3 МИН</div>
+      <div class="serif" style="font-size: 30px; line-height: 1.2; letter-spacing: -0.01em;">Назар и тихая собака</div>
+    </div>
+
+    <div class="serif" style="font-size: 18.5px; line-height: 1.75; color: #D6D1C9; display: flex; flex-direction: column; gap: 16px;">
+      <div>Однажды вечером, когда солнце уже стелилось по траве длинными тёплыми полосами, Назар вышел гулять в парк.</div>
+      <div>Там, под большим деревом, сидела собака. Она была очень большая и очень тихая. Она не лаяла — она просто дышала, медленно-медленно, как дышит море.</div>
+      <div>Назар посмотрел на неё. Собака посмотрела на Назара. И оба поняли одну важную вещь: когда рядом кто-то дышит спокойно, спокойно становится и тебе.</div>
+    </div>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #22262E; padding-top: 18px; margin-top: 4px;">
+      <div style="display: flex; align-items: center; gap: 9px; color: #5A6069;">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V5a1 1 0 0 1 1-1h5l1 2h7v9h-8l-1-2H5"></path></svg>
+        <span style="font-size: 13px;">Пожаловаться на сказку</span>
+      </div>
+      <div style="font-size: 12.5px; color: #3E434C;">сочинено ИИ</div>
+    </div>
+
+  </div>
+
+  <div style="position: absolute; left: 26px; right: 26px; bottom: 40px; display: flex; gap: 12px;">
+    <div style="flex: 1; height: 56px; border-radius: 18px; border: 1.5px solid #3A404C; display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 15px; font-weight: 600; color: #C6CBD3;">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4l14 8-14 8z"></path></svg>
+      Читать вслух
+    </div>
+    <div style="width: 56px; height: 56px; border-radius: 18px; background: #E0A264; color: #2A1B0A; display: flex; align-items: center; justify-content: center;">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h11l3 3v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path><path d="M9 4v5h6"></path></svg>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script data-dc-script data-props='{"$preview":{"width":393,"height":852}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

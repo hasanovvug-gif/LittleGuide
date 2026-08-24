@@ -39,3 +39,5 @@ firebase-debug.log
 # Design canvas: seeded output пересобирается из design/canvas/*.dc.html
 design/canvas/*.html
 !design/canvas/*.dc.html
+design/archive/**/*.html
+!design/archive/**/*.dc.html
