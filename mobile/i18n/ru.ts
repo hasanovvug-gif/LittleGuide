@@ -57,6 +57,18 @@ export const ru = {
     answersCount: 'ответа',
     entriesCount: 'записей',
     empty: 'Здесь появятся отмеченные активности и ваши записи.',
+    photo: 'Фото',
+    voice: 'Голос',
+    recording: 'Идёт запись',
+    stopRecording: 'Стоп',
+    removeAttachment: 'Убрать',
+    deleteEntry: 'Удалить запись',
+    deleteEntryBody: 'Запись исчезнет вместе с фото и голосом. Вернуть будет нельзя.',
+    photoDenied: 'Нужен доступ к фото — включите его в настройках телефона.',
+    micDenied: 'Нужен доступ к микрофону — включите его в настройках телефона.',
+    addPhoto: 'Добавить фото',
+    fromCamera: 'Снять',
+    fromLibrary: 'Из галереи',
   },
 
   story: {
@@ -98,9 +110,20 @@ export const ru = {
     import: 'Восстановить из файла',
     child: 'Ребёнок',
     about: 'О приложении',
+    backup: 'Копия данных',
+    backupHint: 'Один файл со всеми записями, фото и голосом. Приложение никуда его не отправляет — вы сами решаете, куда его положить.',
+    exporting: 'Собираю файл…',
+    exportFailed: 'Не получилось собрать файл.',
+    importConfirm: 'Восстановить из файла?',
+    importConfirmBody: 'Всё, что сейчас в приложении, будет заменено содержимым файла: {child}, записей — {entries}, фото и голосовых — {media}. Вернуть будет нельзя.',
+    importReplace: 'Заменить',
+    importDone: 'Данные восстановлены.',
+    importFailed: 'Файл не подходит: он повреждён или сделан другим приложением.',
+    noSpace: 'На телефоне не хватает места.',
+    importing: 'Восстанавливаю…',
   },
 
-  common: { cancel: 'Отмена', close: 'Закрыть', ok: 'Хорошо', hours: 'ч', minutesShort: 'мин' },
+  common: { cancel: 'Отмена', close: 'Закрыть', ok: 'Хорошо', hours: 'ч', minutesShort: 'мин', delete: 'Удалить' },
 };
 
 export type Dict = typeof ru;

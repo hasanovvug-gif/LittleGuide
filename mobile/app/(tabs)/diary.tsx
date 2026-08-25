@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/hooks/useTheme';
@@ -8,16 +8,17 @@ import { useAppStore } from '@/store/useAppStore';
 import { fill, questionForWeek } from '@/content';
 import { AiFailure, aiEnabled, askConsent, generateSummary } from '@/lib/ai';
 import { formatDayStamp, weekIndex } from '@/lib/age';
-import { typography as t, fonts } from '@/constants/theme';
+import { mediaUri } from '@/lib/media';
+import { typography as t } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
-import { IconPlus } from '@/components/Icon';
+import { AudioNote } from '@/components/AudioNote';
+import { DiaryComposer } from '@/components/DiaryComposer';
 
 export default function DiaryScreen() {
   const theme = useTheme();
   const tr = useT();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [draft, setDraft] = useState('');
   const [slicing, setSlicing] = useState(false);
 
   const child = useAppStore((s) => s.child)!;
@@ -25,6 +26,7 @@ export default function DiaryScreen() {
   const diary = useAppStore((s) => s.diary);
   const capsule = useAppStore((s) => s.capsule);
   const addEntry = useAppStore((s) => s.addDiaryEntry);
+  const removeEntry = useAppStore((s) => s.removeDiaryEntry);
   const consent = useAppStore((s) => s.settings.aiConsent);
   const setSettings = useAppStore((s) => s.setSettings);
 
@@ -51,7 +53,7 @@ export default function DiaryScreen() {
     try {
       const entries = monthAnswers.map((c) => c.text).reverse();
       const { text } = await generateSummary(child.name, entries, lang);
-      addEntry({ kind: 'slice', text });
+      await addEntry({ kind: 'slice', text });
     } catch (e) {
       const code = e instanceof AiFailure ? e.code : 'failed';
       Alert.alert(tr.diary.monthSlice, code === 'rate_limited' ? tr.story.busy : tr.story.failed, [
@@ -60,6 +62,13 @@ export default function DiaryScreen() {
     } finally {
       setSlicing(false);
     }
+  }
+
+  function confirmRemove(entryId: string) {
+    Alert.alert(tr.diary.deleteEntry, tr.diary.deleteEntryBody, [
+      { text: tr.common.cancel, style: 'cancel' },
+      { text: tr.common.delete, style: 'destructive', onPress: () => void removeEntry(entryId) },
+    ]);
   }
 
   return (
@@ -115,52 +124,41 @@ export default function DiaryScreen() {
         ) : null}
       </Card>
 
-      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-end' }}>
-        <TextInput
-          value={draft}
-          onChangeText={setDraft}
-          placeholder={tr.diary.placeholder}
-          placeholderTextColor={theme.caption}
-          multiline
-          style={{
-            flex: 1, minHeight: theme.hit, maxHeight: 120, borderRadius: theme.radius.md,
-            backgroundColor: theme.card, borderWidth: 1, borderColor: theme.line,
-            paddingHorizontal: 14, paddingVertical: 12,
-            fontFamily: fonts.sans, fontSize: 14, color: theme.text,
-          }}
-        />
-        <Pressable
-          onPress={() => {
-            const text = draft.trim();
-            if (!text) return;
-            addEntry({ kind: 'note', text });
-            setDraft('');
-          }}
-          style={{
-            width: theme.hit, height: theme.hit, borderRadius: theme.radius.md,
-            backgroundColor: theme.accent, alignItems: 'center', justifyContent: 'center',
-          }}
-        >
-          <IconPlus color={theme.onAccent} />
-        </Pressable>
-      </View>
+      <DiaryComposer theme={theme} />
 
       {diary.length === 0 ? (
         <Text style={[t.caption, { color: theme.caption }]}>{tr.diary.empty}</Text>
       ) : (
         <View style={{ gap: 16 }}>
           {diary.map((e) => (
-            <View key={e.id} style={{ flexDirection: 'row', gap: 14 }}>
+            <Pressable
+              key={e.id}
+              onLongPress={() => confirmRemove(e.id)}
+              delayLongPress={400}
+              style={{ flexDirection: 'row', gap: 14 }}
+            >
               <Text style={[t.caption, { color: theme.caption, width: 46, fontVariant: ['tabular-nums'] }]}>
                 {formatDayStamp(e.ts)}
               </Text>
-              <View style={{ flex: 1, gap: 3 }}>
+              <View style={{ flex: 1, gap: 6 }}>
                 {e.kind !== 'note' ? (
                   <Eyebrow color={theme.captionWarm}>{kindLabel(e.kind, tr)}</Eyebrow>
                 ) : null}
-                <Text style={[t.body, { color: theme.text }]}>{e.text}</Text>
+                {e.text ? <Text style={[t.body, { color: theme.text }]}>{e.text}</Text> : null}
+                {e.photo ? (
+                  <Image
+                    source={{ uri: mediaUri(e.photo) }}
+                    style={{ width: '100%', aspectRatio: 4 / 3, borderRadius: theme.radius.md, backgroundColor: theme.chip }}
+                    resizeMode="cover"
+                  />
+                ) : null}
+                {e.audio ? (
+                  <View style={{ alignSelf: 'flex-start' }}>
+                    <AudioNote name={e.audio} theme={theme} />
+                  </View>
+                ) : null}
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
       )}

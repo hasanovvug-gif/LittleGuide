@@ -45,7 +45,7 @@ export default function StoryScreen() {
       const story = await generateStory(child.name, day.trim(), lang);
       const minutes = readingMinutes(story.text);
       const id = saveStory({ title: story.title, text: story.text, minutes, source: 'ai' });
-      addDiaryEntry({ kind: 'story', text: story.title });
+      void addDiaryEntry({ kind: 'story', text: story.title });
       setDay('');
       router.push({ pathname: '/read/[id]', params: { id } });
     } catch (e) {

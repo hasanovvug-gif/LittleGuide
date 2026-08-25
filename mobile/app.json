@@ -11,7 +11,10 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.littleguide.app",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSPhotoLibraryUsageDescription": "Чтобы добавить фото в дневник ребёнка. Снимок остаётся на этом телефоне.",
+        "NSCameraUsageDescription": "Чтобы сделать снимок прямо в дневник. Фото остаётся на этом телефоне.",
+        "NSMicrophoneUsageDescription": "Чтобы записать голосовую заметку в дневник. Запись остаётся на этом телефоне."
       },
       "buildNumber": "1"
     },
@@ -38,6 +41,19 @@
           "dark": {
             "backgroundColor": "#15171C"
           }
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Чтобы записать голосовую заметку в дневник. Запись остаётся на этом телефоне."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Чтобы добавить фото в дневник ребёнка. Снимок остаётся на этом телефоне.",
+          "cameraPermission": "Чтобы сделать снимок прямо в дневник. Фото остаётся на этом телефоне."
         }
       ]
     ],
