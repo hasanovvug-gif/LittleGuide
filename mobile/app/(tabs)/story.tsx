@@ -1,18 +1,20 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
 import { useAppStore } from '@/store/useAppStore';
 import { bundledStories, fill } from '@/content';
+import { AiFailure, aiEnabled, askConsent, generateStory, readingMinutes } from '@/lib/ai';
 import { typography as t, fonts } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
 import { IconStory } from '@/components/Icon';
 
 /**
  * Экран «Сказка». В бандле десять готовых сказок — библиотека работает офлайн
- * с первого запуска. Генерация через Worker подключается на этапе 5.
+ * с первого запуска. Сочинение идёт через воркер-прокси; если он недоступен,
+ * экран остаётся рабочим и просто отправляет к готовым сказкам.
  */
 export default function StoryScreen() {
   const theme = useTheme();
@@ -20,10 +22,41 @@ export default function StoryScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [day, setDay] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const child = useAppStore((s) => s.child)!;
   const lang = useAppStore((s) => s.settings.language);
   const saved = useAppStore((s) => s.stories);
+  const consent = useAppStore((s) => s.settings.aiConsent);
+  const setSettings = useAppStore((s) => s.setSettings);
+  const saveStory = useAppStore((s) => s.saveStory);
+  const addDiaryEntry = useAppStore((s) => s.addDiaryEntry);
+
+  const canGenerate = aiEnabled && day.trim().length > 0 && !busy;
+
+  async function onGenerate() {
+    if (!canGenerate) return;
+    if (!consent) {
+      if (!(await askConsent(tr.ai))) return;
+      setSettings({ aiConsent: true });
+    }
+    setBusy(true);
+    try {
+      const story = await generateStory(child.name, day.trim(), lang);
+      const minutes = readingMinutes(story.text);
+      const id = saveStory({ title: story.title, text: story.text, minutes, source: 'ai' });
+      addDiaryEntry({ kind: 'story', text: story.title });
+      setDay('');
+      router.push({ pathname: '/read/[id]', params: { id } });
+    } catch (e) {
+      const code = e instanceof AiFailure ? e.code : 'failed';
+      Alert.alert(tr.story.title, code === 'rate_limited' ? tr.story.busy : tr.story.failed, [
+        { text: tr.common.ok },
+      ]);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   const library = [
     ...saved.map((s) => ({ id: s.id, title: s.title, minutes: s.minutes, ai: s.source === 'ai' })),
@@ -46,6 +79,7 @@ export default function StoryScreen() {
           placeholder={tr.story.placeholder}
           placeholderTextColor={theme.caption}
           multiline
+          editable={!busy}
           style={{
             minHeight: 64, fontFamily: fonts.sans, fontSize: 15, lineHeight: 23, color: theme.text,
           }}
@@ -67,14 +101,22 @@ export default function StoryScreen() {
           ))}
         </View>
         <Pressable
-          disabled
+          onPress={onGenerate}
+          disabled={!canGenerate}
           style={{
-            height: theme.bigHit, borderRadius: theme.radius.md, backgroundColor: theme.chip,
+            height: theme.bigHit, borderRadius: theme.radius.md,
+            backgroundColor: canGenerate ? theme.accent : theme.chip,
             alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 9,
           }}
         >
-          <IconStory size={19} color={theme.captionWarm} />
-          <Text style={[t.button, { color: theme.captionWarm }]}>{tr.story.generate}</Text>
+          {busy ? (
+            <ActivityIndicator color={theme.captionWarm} />
+          ) : (
+            <IconStory size={19} color={canGenerate ? theme.onAccent : theme.captionWarm} />
+          )}
+          <Text style={[t.button, { color: canGenerate ? theme.onAccent : theme.captionWarm }]}>
+            {busy ? tr.story.generating : tr.story.generate}
+          </Text>
         </Pressable>
         <Text style={[t.caption, { color: theme.caption }]}>{tr.story.offlineHint}</Text>
       </Card>

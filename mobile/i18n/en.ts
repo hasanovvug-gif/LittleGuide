@@ -60,6 +60,7 @@ export const en: Dict = {
     capsuleHint: 'One line. In a month, four answers become a snapshot worth rereading.',
     capsuleCounter: 'QUESTION {n} OF 4',
     monthSlice: 'SNAPSHOT',
+    makeSlice: 'Make the month slice',
     answersCount: 'answers',
     entriesCount: 'entries',
     empty: 'Marked activities and your notes will appear here.',
@@ -72,6 +73,9 @@ export const en: Dict = {
     placeholder: 'We walked in the park, saw a big dog, ate porridge',
     chips: ['Went out', 'Bath time', 'Visited grandma', 'New food'],
     generate: 'Make a story',
+    generating: 'Writing…',
+    failed: 'Could not write a story. The ready-made ones are below.',
+    busy: 'The storyteller is busy. Please try a little later.',
     offlineHint: 'Offline — read the ready-made stories below.',
     library: 'LIBRARY',
     minutes: 'min',
@@ -79,6 +83,17 @@ export const en: Dict = {
     report: 'Report',
     hard: 'This is hard',
     breathing: 'Two minutes of breathing',
+  },
+
+  ai: {
+    ...ru.ai,
+    consentTitle: 'Send the text to the storyteller?',
+    consentBody: 'To write a story and suggest a new game, the app sends your child\u2019s name and the text you wrote to Google Gemini through its own server. The diary, photos and timers stay on this phone. You can revoke this in settings.',
+    allow: 'Allow',
+    later: 'Not now',
+    consentLabel: 'Storyteller and suggestions',
+    consentOn: 'Allowed',
+    consentOff: 'Off',
   },
 
   settings: {

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
 import { useAppStore, type ThemeSetting } from '@/store/useAppStore';
+import { aiEnabled } from '@/lib/ai';
 import type { Lang } from '@/content/types';
 import { typography as t, type Theme } from '@/constants/theme';
 import { Eyebrow } from '@/components/ui';
@@ -54,6 +55,19 @@ export default function SettingsScreen() {
           <Row key={o.key} label={o.label} active={settings.language === o.key} onPress={() => setSettings({ language: o.key })} theme={theme} />
         ))}
       </View>
+
+      {aiEnabled ? (
+        <View style={{ gap: 12 }}>
+          <Eyebrow color={theme.captionWarm}>{tr.ai.consentLabel}</Eyebrow>
+          <Row
+            label={settings.aiConsent ? tr.ai.consentOn : tr.ai.consentOff}
+            active={settings.aiConsent}
+            onPress={() => setSettings({ aiConsent: !settings.aiConsent })}
+            theme={theme}
+          />
+          <Text style={[t.caption, { color: theme.caption }]}>{tr.ai.consentBody}</Text>
+        </View>
+      ) : null}
 
       {child ? (
         <View style={{ gap: 8 }}>

@@ -28,7 +28,8 @@
     },
     "extra": {
       "router": {},
-      "aiProxyUrl": ""
+      "aiProxyUrl": "",
+      "aiAppToken": ""
     }
   }
 }

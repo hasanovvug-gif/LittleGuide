@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
 import { useAppStore } from '@/store/useAppStore';
 import { fill, questionForWeek } from '@/content';
+import { AiFailure, aiEnabled, askConsent, generateSummary } from '@/lib/ai';
 import { formatDayStamp, weekIndex } from '@/lib/age';
 import { typography as t, fonts } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
@@ -17,20 +18,49 @@ export default function DiaryScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [draft, setDraft] = useState('');
+  const [slicing, setSlicing] = useState(false);
 
   const child = useAppStore((s) => s.child)!;
   const lang = useAppStore((s) => s.settings.language);
   const diary = useAppStore((s) => s.diary);
   const capsule = useAppStore((s) => s.capsule);
   const addEntry = useAppStore((s) => s.addDiaryEntry);
+  const consent = useAppStore((s) => s.settings.aiConsent);
+  const setSettings = useAppStore((s) => s.setSettings);
 
   const wIndex = weekIndex(child.birth);
   const question = questionForWeek(lang, wIndex);
   const answeredThisWeek = capsule.some((c) => c.weekIndex === wIndex);
-  const answersThisMonth = useMemo(
-    () => capsule.filter((c) => c.text.length > 0 && sameMonth(c.ts)).length,
+  const monthAnswers = useMemo(
+    () => capsule.filter((c) => c.text.length > 0 && sameMonth(c.ts)),
     [capsule],
   );
+  const answersThisMonth = monthAnswers.length;
+
+  // Срез собирается раз в месяц и только когда все четыре ответа на месте.
+  const sliceDone = diary.some((e) => e.kind === 'slice' && sameMonth(e.ts));
+  const canSlice = aiEnabled && answersThisMonth >= 4 && !sliceDone && !slicing;
+
+  async function onSlice() {
+    if (!canSlice) return;
+    if (!consent) {
+      if (!(await askConsent(tr.ai))) return;
+      setSettings({ aiConsent: true });
+    }
+    setSlicing(true);
+    try {
+      const entries = monthAnswers.map((c) => c.text).reverse();
+      const { text } = await generateSummary(child.name, entries, lang);
+      addEntry({ kind: 'slice', text });
+    } catch (e) {
+      const code = e instanceof AiFailure ? e.code : 'failed';
+      Alert.alert(tr.diary.monthSlice, code === 'rate_limited' ? tr.story.busy : tr.story.failed, [
+        { text: tr.common.ok },
+      ]);
+    } finally {
+      setSlicing(false);
+    }
+  }
 
   return (
     <ScrollView
@@ -57,7 +87,7 @@ export default function DiaryScreen() {
               {answeredThisWeek ? tr.diary.answered : tr.diary.answer}
             </Text>
           </Pressable>
-          <View style={{ flexDirection: 'row', gap: 5 }}>
+          <View style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}>
             {[0, 1, 2, 3].map((i) => (
               <View
                 key={i}
@@ -69,6 +99,20 @@ export default function DiaryScreen() {
             ))}
           </View>
         </View>
+
+        {canSlice || slicing ? (
+          <Pressable
+            onPress={onSlice}
+            disabled={slicing}
+            style={{
+              height: theme.hit, borderRadius: theme.radius.sm, backgroundColor: theme.chip,
+              alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8,
+            }}
+          >
+            {slicing ? <ActivityIndicator color={theme.captionWarm} /> : null}
+            <Text style={[t.button, { color: theme.captionWarm }]}>{tr.diary.makeSlice}</Text>
+          </Pressable>
+        ) : null}
       </Card>
 
       <View style={{ flexDirection: 'row', gap: 10, alignItems: 'flex-end' }}>

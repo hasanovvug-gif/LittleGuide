@@ -8,7 +8,7 @@ export const SCHEMA_VERSION = 1;
 
 export type Child = { name: string; birth: string };
 export type ThemeSetting = 'auto' | 'day' | 'night';
-export type Settings = { theme: ThemeSetting; language: Lang };
+export type Settings = { theme: ThemeSetting; language: Lang; aiConsent: boolean };
 
 export type RhythmKind = 'sleep' | 'feeding';
 export type RhythmEvent = { id: string; kind: RhythmKind; start: number; end: number | null };
@@ -58,7 +58,7 @@ type State = Persisted & {
   removeDiaryEntry: (id: string) => void;
   answerCapsule: (weekIndex: number, questionId: string, text: string) => void;
   skipCapsule: (weekIndex: number, questionId: string) => void;
-  saveStory: (story: Omit<SavedStory, 'id' | 'ts'>) => void;
+  saveStory: (story: Omit<SavedStory, 'id' | 'ts'>) => string;
   exportPayload: () => Persisted;
   importPayload: (payload: unknown) => boolean;
   reset: () => void;
@@ -67,7 +67,7 @@ type State = Persisted & {
 const emptyState: Persisted = {
   version: SCHEMA_VERSION,
   child: null,
-  settings: { theme: 'auto', language: 'ru' },
+  settings: { theme: 'auto', language: 'ru', aiConsent: false },
   marks: {},
   skips: {},
   rhythm: [],
@@ -115,6 +115,8 @@ export function normalize(raw: unknown): Persisted | null {
         ? (r.settings!.theme as ThemeSetting)
         : 'auto',
       language: (['ru', 'ua', 'en'] as const).includes(r.settings?.language as Lang) ? (r.settings!.language as Lang) : 'ru',
+      // Согласие на AI из чужого файла не наследуется: спрашиваем заново.
+      aiConsent: r.settings?.aiConsent === true,
     },
     marks: rec(r.marks),
     skips: rec(r.skips),
@@ -204,6 +206,7 @@ export const useAppStore = create<State>((set, get) => ({
     const full: SavedStory = { id: id('s'), ts: Date.now(), ...story };
     set({ stories: [full, ...get().stories] });
     persist(get());
+    return full.id;
   },
 
   exportPayload: () => {

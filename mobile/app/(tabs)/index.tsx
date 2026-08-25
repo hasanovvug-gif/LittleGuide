@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
 import { markedDaysThisMonth, useAppStore } from '@/store/useAppStore';
-import { activityOfDay, fill, leapForWeek, stormNote, weatherForWeek, weekEntry } from '@/content';
+import { activitiesForWeek, activityOfDay, fill, leapForWeek, stormNote, weatherForWeek, weekEntry } from '@/content';
+import { aiEnabled, askConsent, generateActivity, type AiActivity } from '@/lib/ai';
 import { dayKey, weeksSince } from '@/lib/age';
 import { typography as t, fonts } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
@@ -17,6 +18,8 @@ export default function TodayScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [whyOpen, setWhyOpen] = useState(false);
+  const [aiActivity, setAiActivity] = useState<AiActivity | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const child = useAppStore((s) => s.child)!;
   const lang = useAppStore((s) => s.settings.language);
@@ -24,6 +27,8 @@ export default function TodayScreen() {
   const skips = useAppStore((s) => s.skips);
   const markDone = useAppStore((s) => s.markActivityDone);
   const skipActivity = useAppStore((s) => s.skipActivity);
+  const consent = useAppStore((s) => s.settings.aiConsent);
+  const setSettings = useAppStore((s) => s.setSettings);
 
   const today = dayKey();
   const week = weeksSince(child.birth);
@@ -34,6 +39,41 @@ export default function TodayScreen() {
     () => activityOfDay(lang, week, today, skips[today] ?? 0),
     [lang, week, today, skips],
   );
+
+  // Бандловые игры этой недели кончились — только тогда просим новую у воркера.
+  const poolSize = useMemo(() => activitiesForWeek(lang, week).length, [lang, week]);
+  const poolExhausted = (skips[today] ?? 0) >= poolSize;
+
+  const card = aiActivity
+    ? { id: `ai_${today}`, minutes: aiActivity.minutes, title: aiActivity.title, text: aiActivity.body, why: aiActivity.whyBody, ai: true }
+    : { id: activity.id, minutes: activity.minutes, title: activity.title, text: fill(activity.text, child.name), why: activity.why, ai: false };
+
+  async function onAnother() {
+    if (busy) return;
+    if (!aiEnabled || !poolExhausted) {
+      setAiActivity(null);
+      skipActivity();
+      return;
+    }
+    if (!consent) {
+      if (!(await askConsent(tr.ai))) {
+        skipActivity();
+        return;
+      }
+      setSettings({ aiConsent: true });
+    }
+    setBusy(true);
+    try {
+      setAiActivity(await generateActivity(child.name, week, lang));
+    } catch {
+      // Экран не ругается на отсутствие сети: молча возвращаемся к бандловым играм.
+      setAiActivity(null);
+      skipActivity();
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const doneToday = marks[today] !== undefined;
   const marked = markedDaysThisMonth(marks);
 
@@ -96,9 +136,11 @@ export default function TodayScreen() {
       ) : null}
 
       <Card theme={theme}>
-        <Eyebrow color={theme.accentText}>{`${tr.today.activityLabel} · ${activity.minutes} ${tr.today.minutes}`}</Eyebrow>
-        <Text style={[t.h3, { color: theme.text }]}>{activity.title}</Text>
-        <Text style={[t.body, { color: theme.textSecondary }]}>{fill(activity.text, child.name)}</Text>
+        <Eyebrow color={theme.accentText}>
+          {`${tr.today.activityLabel} · ${card.minutes} ${tr.today.minutes}${card.ai ? ` · ${tr.story.aiMark}` : ''}`}
+        </Eyebrow>
+        <Text style={[t.h3, { color: theme.text }]}>{card.title}</Text>
+        <Text style={[t.body, { color: theme.textSecondary }]}>{card.text}</Text>
 
         <Pressable
           onPress={() => setWhyOpen((v) => !v)}
@@ -112,11 +154,11 @@ export default function TodayScreen() {
         </Pressable>
 
         {whyOpen ? (
-          <Text style={[t.body, { color: theme.textSecondary }]}>{activity.why}</Text>
+          <Text style={[t.body, { color: theme.textSecondary }]}>{card.why}</Text>
         ) : null}
 
         <Pressable
-          onPress={() => !doneToday && markDone(activity.id, activity.title)}
+          onPress={() => !doneToday && markDone(card.id, card.title)}
           style={{
             height: theme.bigHit, borderRadius: theme.radius.md,
             backgroundColor: doneToday ? theme.chip : theme.accent,
@@ -130,7 +172,8 @@ export default function TodayScreen() {
         </Pressable>
 
         {!doneToday ? (
-          <Pressable onPress={skipActivity} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center' }}>
+          <Pressable onPress={onAnother} disabled={busy} style={{ minHeight: 44, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 }}>
+            {busy ? <ActivityIndicator color={theme.captionWarm} /> : null}
             <Text style={[t.caption, { color: theme.captionWarm }]}>{tr.today.another}</Text>
           </Pressable>
         ) : null}
