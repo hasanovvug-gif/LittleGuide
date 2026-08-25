@@ -88,17 +88,26 @@ Sol проверял план этапа 5 на опровержение. При
 
 ### Точка входа для новой сессии
 
+**Состояние на 25.08: этап 5 закрыт целиком, приложение на тесте в обоих магазинах.
+Следующая работа — этап 6 (фото и аудио дневника, экспорт-импорт файлом).**
+
 1. Прочитать этот файл и план `docs/plans/2026-08-24-littleguide-2.0.md`.
 2. Приложение: `cd mobile && npx expo start`, затем
    `xcrun simctl openurl <udid> exp://127.0.0.1:8081` — **из bash с отключённой песочницей**.
    Симулятор iPhone 17 Pro (`82B0415F-2AE5-46C0-9290-9A4E6A33F8BE`), Expo Go установлен.
    ⚠️ Устройство должно быть загружено **при запущенном Simulator.app**, иначе оно поднимается
    без экрана и скриншоты падают с «does not have a default display port».
-3. Воркер локально: `cd worker && npm install`, `printf 'GEMINI_API_KEY=…\nAPP_TOKEN=dev\n' > .dev.vars`,
-   `./node_modules/.bin/wrangler dev --port 8788 --local` — **тоже без песочницы**: она рвёт
-   порт инспектора 9229. Чтобы приложение его увидело, временно прописать
-   `extra.aiProxyUrl = "http://localhost:8788"` и `extra.aiAppToken = "dev"` в `mobile/app.json`
-   (в репозитории они пустые).
+3. Воркер **боевой и уже прописан** в `mobile/app.json`
+   (`extra.aiProxyUrl = https://littleguide-ai.hasanov-dev.workers.dev`, токен там же —
+   он публичный по устройству, не секрет). Локальный воркер больше не нужен; если всё же
+   понадобится — `cd worker && ./node_modules/.bin/wrangler dev --port 8788 --local`
+   **без песочницы** (она рвёт порт инспектора 9229), временно подменив `aiProxyUrl`.
+4. Пересборка и выкладка: `eas build -p ios|android --profile production --non-interactive`,
+   затем `eas submit -p ios|android --latest --non-interactive` — **из bash без песочницы**,
+   иначе `eas build` врёт про успех. Версии локальные: перед новой сборкой поднять
+   `ios.buildNumber` и `android.versionCode` в `app.json` руками.
+   iOS-креды локальные, `mobile/credentials.json` (в `.gitignore`) — сертификат общий с GymBar.
+5. Иконка/splash: править `mobile/scripts/brand.html`, затем `python3 scripts/shoot-brand.py`.
 
 ### Решения и открытые вопросы
 
