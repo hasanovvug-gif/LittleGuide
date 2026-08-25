@@ -14,6 +14,7 @@ import { deleteMedia, mediaUri, savePhoto, saveAudio } from '@/lib/media';
 import { typography as t, fonts, type Theme } from '@/constants/theme';
 import { IconCamera, IconMic, IconPlus, IconStop, IconTrash } from '@/components/Icon';
 import { AudioNote } from '@/components/AudioNote';
+import { markRecording } from '@/lib/audio-session';
 
 /**
  * Композер записи: текст, одно фото и одна голосовая заметка.
@@ -108,6 +109,7 @@ export function DiaryComposer({ theme }: { theme: Theme }) {
   }
 
   async function beginRecording() {
+    markRecording(true);
     await setAudioModeAsync({ allowsRecording: true, playsInSilentMode: true });
     await recorder.prepareToRecordAsync();
     recorder.record();
@@ -123,11 +125,13 @@ export function DiaryComposer({ theme }: { theme: Theme }) {
       try {
         const perm = await requestRecordingPermissionsAsync();
         if (!perm.granted) {
+          markRecording(false);
           Alert.alert(tr.diary.voice, tr.diary.micDenied, [{ text: tr.common.ok }]);
           return;
         }
         await beginRecording();
       } catch (e) {
+        markRecording(false);
         Alert.alert(tr.diary.voice, String(e), [{ text: tr.common.ok }]);
         return;
       }
@@ -154,6 +158,7 @@ export function DiaryComposer({ theme }: { theme: Theme }) {
       console.warn('[voice] stop failed', e);
     }
     // Запись на iOS остаётся активной сессией и глушит плеер — возвращаем режим воспроизведения.
+    markRecording(false);
     await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
     const uri = recorder.uri;
     if (!uri) return;

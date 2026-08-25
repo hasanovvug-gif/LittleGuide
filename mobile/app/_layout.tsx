@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { View } from 'react-native';
+import { AppState, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -8,6 +8,7 @@ import { useFonts, Literata_400Regular, Literata_500Medium } from '@expo-google-
 import { Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold } from '@expo-google-fonts/manrope';
 import { useTheme } from '@/hooks/useTheme';
 import { useAppStore } from '@/store/useAppStore';
+import { applyPlaybackAudioMode } from '@/lib/audio-session';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -25,6 +26,16 @@ export default function RootLayout() {
   });
 
   useEffect(() => { hydrate(); }, [hydrate]);
+
+  // Режим сессии ставится на старте и заново при возврате из фона:
+  // чужой звонок или другое приложение могут отобрать сессию, и голосовые снова замолчат.
+  useEffect(() => {
+    applyPlaybackAudioMode();
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') applyPlaybackAudioMode();
+    });
+    return () => sub.remove();
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded && hasHydrated) SplashScreen.hideAsync().catch(() => {});
