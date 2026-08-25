@@ -12,24 +12,47 @@
       "bundleIdentifier": "com.littleguide.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "buildNumber": "1"
     },
     "android": {
       "edgeToEdgeEnabled": true,
-      "package": "com.littleguide.app"
+      "package": "com.littleguide.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#F2E7DE"
+      },
+      "versionCode": 1
     },
     "plugins": [
       "expo-router",
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FBF6F1",
+          "dark": {
+            "backgroundColor": "#15171C"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
       "router": {},
-      "aiProxyUrl": "",
-      "aiAppToken": ""
-    }
+      "aiProxyUrl": "https://littleguide-ai.hasanov-dev.workers.dev",
+      "aiAppToken": "lg_823f88afa114f7109c1f1ef0",
+      "eas": {
+        "projectId": "7ed7da36-635b-480f-81cc-88824f12e686"
+      }
+    },
+    "icon": "./assets/images/icon.png",
+    "owner": "vugarapple"
   }
 }

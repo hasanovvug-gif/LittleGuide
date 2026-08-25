@@ -10,3 +10,6 @@ android/
 
 expo-env.d.ts
 # @end expo-cli
+
+# Пути к сертификатам и пароль p12 — не в репозиторий.
+credentials.json

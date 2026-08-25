@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>LittleGuide brand assets</title>
+<style>
+  /* Палитра — из design/canvas (тема «Мягкий свет»). */
+  :root{
+    --bg1:#FBF6F1; --bg2:#F2E7DE; --accent:#E8A184; --accent-deep:#C9714B;
+    --cream:#FFF7EF; --night:#15171C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:transparent}
+  .stage{width:1024px;height:1024px;display:grid;place-items:center;overflow:hidden}
+  /* Иконка магазина: непрозрачный фон, скругление ставит сама ОС. */
+  .stage.icon{background:linear-gradient(150deg,#F7E3D5 0%,#EFB795 48%,#E39A79 100%)}
+  /* Adaptive-icon: рисунок в безопасной зоне 66 %, фон задаёт adaptiveIcon.backgroundColor. */
+  .stage.adaptive{background:transparent}
+  .stage.splash{background:transparent}
+  .art{display:block}
+  .stage.adaptive .art{transform:scale(.66)}
+</style>
+<div class="stage icon" id="stage">
+  <svg class="art" width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" id="art">
+    <defs>
+      <!-- Полумесяц вырезается вторым кругом: форма чистая и читается на 48 px. -->
+      <mask id="crescent">
+        <rect width="1024" height="1024" fill="black"/>
+        <circle cx="500" cy="530" r="252" fill="white"/>
+        <circle cx="614" cy="452" r="222" fill="black"/>
+      </mask>
+    </defs>
+    <rect width="1024" height="1024" fill="var(--cream)" mask="url(#crescent)"/>
+    <!-- Звезда — ребёнок рядом; вынесена из тела месяца, силуэты не слипаются. -->
+    <path d="M726 300c6-24 9-36 15-36s9 12 15 36c4 15 6 23 11 28s13 8 28 11c24 6 36 9 36 15s-12 9-36 15c-15 4-23 6-28 11s-7 13-11 28c-6 24-9 36-15 36s-9-12-15-36c-4-15-6-23-11-28s-13-8-28-11c-24-6-36-9-36-15s12-9 36-15c15-4 23-6 28-11s7-13 11-28z"
+          fill="var(--cream)"/>
+  </svg>
+</div>
+<script>
+  // Вариант приходит из ?v= — один исходник на все три ассета, расхождений между ними нет.
+  const v = new URLSearchParams(location.search).get('v') || 'icon';
+  const stage = document.getElementById('stage');
+  stage.className = 'stage ' + v;
+  if (v !== 'icon') {
+    // На прозрачном фоне кремовый рисунок невидим — переключаем на акцент.
+    document.querySelectorAll('#art path, #art rect[mask]').forEach(p => p.setAttribute('fill', '#E8A184'));
+  }
+</script>

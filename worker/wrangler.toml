@@ -5,14 +5,14 @@ workers_dev = true
 
 # GEMINI_API_KEY и APP_TOKEN — секреты, задаются `wrangler secret put`, в репозитории их нет.
 
-[[unsafe.bindings]]
-name = "RATE_BURST"
-type = "ratelimit"
+# Лимиты. Раньше стояли в [[unsafe.bindings]] — там биндинг уезжал в метаданные
+# и на живом воркере не считал вообще (8 запросов при потолке 6 прошли все, 25.08).
+[[ratelimits]]
+name = "RATE_BURST"          # всплеск с одного устройства
 namespace_id = "1001"
 simple = { limit = 6, period = 60 }
 
-[[unsafe.bindings]]
-name = "RATE_GLOBAL"
-type = "ratelimit"
+[[ratelimits]]
+name = "RATE_GLOBAL"         # общий потолок на всех
 namespace_id = "1002"
 simple = { limit = 60, period = 60 }
