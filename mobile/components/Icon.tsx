@@ -4,19 +4,30 @@ type Props = { size?: number; color: string };
 
 const S = 1.6;
 
-export function IconToday({ size = 22, color }: Props) {
+export function IconHome({ size = 22, color }: Props) {
   return (
-    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round">
-      <Circle cx="12" cy="12" r="4" />
-      <Path d="M12 3v2M12 19v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M3 12h2M19 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M4.5 11.5 12 4.2l7.5 7.3" />
+      <Path d="M6.3 10v9a1 1 0 0 0 1 1h9.4a1 1 0 0 0 1-1v-9" />
     </Svg>
   );
 }
 
-export function IconRhythm({ size = 22, color }: Props) {
+export function IconSleep({ size = 22, color }: Props) {
   return (
     <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M3 12h3l2-5 3 10 2.5-7 2 4h5.5" />
+      <Path d="M17.2 4.7A7 7 0 1 0 19.3 17.8 8.4 8.4 0 0 1 17.2 4.7z" />
+      <Path d="M19.6 5.6v2.3M18.4 6.75h2.4" />
+    </Svg>
+  );
+}
+
+export function IconFeeding({ size = 22, color }: Props) {
+  return (
+    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M9.5 3.5h5" />
+      <Path d="M10.2 3.5v2.1a1.8 1.8 0 0 1-.55 1.3L8.4 8.15A2.4 2.4 0 0 0 7.7 9.85V18a2.5 2.5 0 0 0 2.5 2.5h3.6a2.5 2.5 0 0 0 2.5-2.5V9.85a2.4 2.4 0 0 0-.7-1.7l-1.25-1.25a1.8 1.8 0 0 1-.55-1.3V3.5" />
+      <Path d="M8.3 13.5h7.4" />
     </Svg>
   );
 }

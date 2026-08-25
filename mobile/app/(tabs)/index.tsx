@@ -1,16 +1,18 @@
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
-import { markedDaysThisMonth, useAppStore } from '@/store/useAppStore';
+import { eventsOfDay, markedDaysThisMonth, useAppStore } from '@/store/useAppStore';
 import { activitiesForWeek, activityOfDay, fill, leapForWeek, stormNote, weatherForWeek, weekEntry } from '@/content';
 import { aiEnabled, askConsent, generateActivity, type AiActivity } from '@/lib/ai';
-import { dayKey, weeksSince } from '@/lib/age';
-import { typography as t, fonts } from '@/constants/theme';
+import { dayKey, formatDuration, weeksSince } from '@/lib/age';
+import { typography as t, fonts, type Theme } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
 import { IconCheck, IconChevron, IconCloud, IconDots } from '@/components/Icon';
+import { SECTION_GROUPS, SECTIONS, type Section } from '@/constants/sections';
 
 export default function TodayScreen() {
   const theme = useTheme();
@@ -29,6 +31,8 @@ export default function TodayScreen() {
   const skipActivity = useAppStore((s) => s.skipActivity);
   const consent = useAppStore((s) => s.settings.aiConsent);
   const setSettings = useAppStore((s) => s.setSettings);
+  const rhythm = useAppStore((s) => s.rhythm);
+  const pinnedTabs = useAppStore((s) => s.settings.pinnedTabs);
 
   const today = dayKey();
   const week = weeksSince(child.birth);
@@ -43,6 +47,54 @@ export default function TodayScreen() {
   // Бандловые игры этой недели кончились — только тогда просим новую у воркера.
   const poolSize = useMemo(() => activitiesForWeek(lang, week).length, [lang, week]);
   const poolExhausted = (skips[today] ?? 0) >= poolSize;
+
+  const todayRhythm = useMemo(() => eventsOfDay(rhythm), [rhythm]);
+  const sleptMs = todayRhythm
+    .filter((e) => e.kind === 'sleep')
+    .reduce((sum, e) => sum + ((e.end ?? Date.now()) - e.start), 0);
+  const feedings = todayRhythm.filter((e) => e.kind === 'feeding').length;
+
+  function togglePin(section: Section) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
+    const title = section.title(tr);
+
+    if (pinnedTabs.includes(section.id)) {
+      Alert.alert(title, undefined, [
+        { text: tr.common.cancel, style: 'cancel' },
+        {
+          text: tr.home.unpin,
+          style: 'destructive',
+          onPress: () => setSettings({ pinnedTabs: pinnedTabs.filter((id) => id !== section.id) }),
+        },
+      ]);
+      return;
+    }
+
+    if (pinnedTabs.length < 3) {
+      Alert.alert(title, undefined, [
+        { text: tr.common.cancel, style: 'cancel' },
+        { text: tr.home.pinBottom, onPress: () => setSettings({ pinnedTabs: [...pinnedTabs, section.id] }) },
+      ]);
+      return;
+    }
+
+    // Уже три закреплённых — второй Alert спрашивает, кого убрать, чтобы освободить место.
+    Alert.alert(
+      tr.home.swapTitle,
+      tr.home.swapBody.replace('{tile}', title),
+      [
+        ...pinnedTabs.map((pinnedId) => {
+          const pinnedSection = SECTIONS.find((s) => s.id === pinnedId);
+          return {
+            text: pinnedSection ? pinnedSection.title(tr) : pinnedId,
+            onPress: () =>
+              setSettings({ pinnedTabs: [...pinnedTabs.filter((id) => id !== pinnedId), section.id] }),
+          };
+        }),
+        { text: tr.common.cancel, style: 'cancel' as const },
+      ],
+    );
+  }
 
   const card = aiActivity
     ? { id: `ai_${today}`, minutes: aiActivity.minutes, title: aiActivity.title, text: aiActivity.body, why: aiActivity.whyBody, ai: true }
@@ -193,7 +245,83 @@ export default function TodayScreen() {
         </View>
         <Text style={[t.caption, { color: theme.caption }]}>{`${marked} ${tr.today.markedDays}`}</Text>
       </View>
+
+      {todayRhythm.length > 0 ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Pressable onPress={() => router.push('/sleep')} hitSlop={8}>
+            <Text style={[t.caption, { color: theme.textSecondary }]}>
+              {tr.rhythm.summarySleep}{' '}
+              <Text style={{ fontFamily: fonts.sansMedium, color: theme.text }}>{formatDuration(sleptMs, true)}</Text>
+            </Text>
+          </Pressable>
+          <Text style={[t.caption, { color: theme.caption }]}>·</Text>
+          <Pressable onPress={() => router.push('/feeding')} hitSlop={8}>
+            <Text style={[t.caption, { color: theme.textSecondary }]}>
+              <Text style={{ fontFamily: fonts.sansMedium, color: theme.text }}>{feedings}</Text>{' '}
+              {tr.rhythm.summaryFeedings}
+            </Text>
+          </Pressable>
+        </View>
+      ) : null}
+
+      <View style={{ gap: 22 }}>
+        {SECTION_GROUPS.map((group) => {
+          const items = SECTIONS.filter((s) => s.group === group.id);
+          if (items.length === 0) return null;
+          return (
+            <View key={group.id} style={{ gap: 12 }}>
+              <Eyebrow color={theme.captionWarm}>{group.label(tr)}</Eyebrow>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+                {items.map((section) => (
+                  <Tile
+                    key={section.id}
+                    section={section}
+                    title={section.title(tr)}
+                    pinned={pinnedTabs.includes(section.id)}
+                    theme={theme}
+                    onPress={() => router.push(section.route)}
+                    onLongPress={() => togglePin(section)}
+                  />
+                ))}
+              </View>
+            </View>
+          );
+        })}
+      </View>
     </ScrollView>
+  );
+}
+
+/** Плитка раздела на Доме. Вынесена наружу: вложенное объявление теряет состояние жеста на каждом рендере. */
+function Tile({ section, title, pinned, theme, onPress, onLongPress }: {
+  section: Section; title: string; pinned: boolean; theme: Theme; onPress: () => void; onLongPress: () => void;
+}) {
+  const Icon = section.icon;
+  return (
+    <Pressable
+      onPress={onPress}
+      onLongPress={onLongPress}
+      delayLongPress={400}
+      style={{
+        width: '47%',
+        backgroundColor: theme.card,
+        borderRadius: theme.radius.lg,
+        padding: 16,
+        gap: 10,
+        minHeight: 92,
+      }}
+    >
+      {pinned ? (
+        <View
+          style={{
+            position: 'absolute', top: 12, right: 12,
+            width: 7, height: 7, borderRadius: 4, backgroundColor: theme.accent,
+          }}
+        />
+      ) : null}
+      <Icon size={22} color={theme.accentText} />
+      <Text style={[t.label, { color: theme.text }]}>{title}</Text>
+    </Pressable>
   );
 }
 

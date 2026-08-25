@@ -2,7 +2,7 @@ import { ru, type Dict } from './ru';
 
 export const ua: Dict = {
   ...ru,
-  tabs: { today: 'Сьогодні', rhythm: 'Ритм', diary: 'Щоденник', story: 'Казка' },
+  tabs: { home: 'Дім', sleep: 'Сон', feeding: 'Годування', diary: 'Щоденник', story: 'Казка' },
 
   onboarding: {
     ...ru.onboarding,
@@ -28,23 +28,40 @@ export const ua: Dict = {
     weather: { calm: 'Спокійний тиждень', cloudy: 'Може бути неспокійніше', storm: 'Тиждень стрибка' },
   },
 
+  home: {
+    ...ru.home,
+    groupDaily: 'Щодня',
+    groupDevelopment: 'Розвиток',
+    pinBottom: 'Закріпити знизу',
+    unpin: 'Відкріпити',
+    swapTitle: 'Знизу вже три розділи',
+    swapBody: 'Щоб закріпити «{tile}», приберіть один із поточних.',
+  },
+
   rhythm: {
     ...ru.rhythm,
-    title: 'Ритм',
-    sleep: 'Сон',
-    feeding: 'Годування',
     running: 'триває',
+    todayLabel: 'СЬОГОДНІ',
+    empty: 'Сьогодні записів поки немає.',
+    summarySleep: 'спав',
+    summaryFeedings: 'годувань',
+  },
+
+  sleep: {
+    ...ru.sleep,
+    title: 'Сон',
     startSleep: 'Заснув',
     stopSleep: 'Прокинувся',
+  },
+
+  feeding: {
+    ...ru.feeding,
+    title: 'Годування',
     startFeeding: 'Почали годувати',
     stopFeeding: 'Закінчили',
     lastFeeding: 'останнє',
     ago: 'тому',
     noFeeding: 'сьогодні ще не відзначали',
-    todayLabel: 'СЬОГОДНІ',
-    summarySleep: 'спав',
-    summaryFeedings: 'годувань',
-    empty: 'Сьогодні записів поки немає.',
   },
 
   diary: {

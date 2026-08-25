@@ -9,7 +9,7 @@ export const SCHEMA_VERSION = 2;
 
 export type Child = { name: string; birth: string };
 export type ThemeSetting = 'auto' | 'day' | 'night';
-export type Settings = { theme: ThemeSetting; language: Lang; aiConsent: boolean };
+export type Settings = { theme: ThemeSetting; language: Lang; aiConsent: boolean; pinnedTabs: string[] };
 
 export type RhythmKind = 'sleep' | 'feeding';
 export type RhythmEvent = { id: string; kind: RhythmKind; start: number; end: number | null };
@@ -66,10 +66,14 @@ type State = Persisted & {
   reset: () => void;
 };
 
+/** Список известных id разделов для валидации pinnedTabs — синхронно с constants/sections.ts. */
+const PINNABLE_IDS = ['sleep', 'feeding', 'diary', 'story'];
+const DEFAULT_PINNED_TABS = ['sleep', 'feeding', 'diary'];
+
 const emptyState: Persisted = {
   version: SCHEMA_VERSION,
   child: null,
-  settings: { theme: 'auto', language: 'ru', aiConsent: false },
+  settings: { theme: 'auto', language: 'ru', aiConsent: false, pinnedTabs: DEFAULT_PINNED_TABS },
   marks: {},
   skips: {},
   rhythm: [],
@@ -134,6 +138,13 @@ export function normalize(raw: unknown): Persisted | null {
   const rec = (v: unknown): Record<string, never> => (v && typeof v === 'object' ? (v as Record<string, never>) : {});
   const str = (v: unknown, max: number): string => (typeof v === 'string' ? v.slice(0, max) : '');
   const media = (v: unknown): string | undefined => (isSafeMediaName(v) ? v : undefined);
+  const pinnedTabs = (v: unknown): string[] => {
+    if (!Array.isArray(v)) return DEFAULT_PINNED_TABS;
+    const known = Array.from(new Set(v.filter((x): x is string => typeof x === 'string' && PINNABLE_IDS.includes(x))));
+    // Слотов ровно три — лишнее обрезаем; если после чистки не осталось ни одного
+    // известного id (битый или чужой файл), это и есть та самая «кривизна» — дефолт.
+    return known.length > 0 ? known.slice(0, 3) : DEFAULT_PINNED_TABS;
+  };
 
   return {
     version: SCHEMA_VERSION,
@@ -147,6 +158,7 @@ export function normalize(raw: unknown): Persisted | null {
       language: (['ru', 'ua', 'en'] as const).includes(r.settings?.language as Lang) ? (r.settings!.language as Lang) : 'ru',
       // Согласие на отправку данных наружу из чужого файла НЕ наследуется — спрашиваем заново.
       aiConsent: false,
+      pinnedTabs: pinnedTabs(r.settings?.pinnedTabs),
     },
     marks: rec(r.marks),
     skips: rec(r.skips),

@@ -1,5 +1,5 @@
 export const ru = {
-  tabs: { today: 'Сегодня', rhythm: 'Ритм', diary: 'Дневник', story: 'Сказка' },
+  tabs: { home: 'Дом', sleep: 'Сон', feeding: 'Кормление', diary: 'Дневник', story: 'Сказка' },
 
   onboarding: {
     title: 'Год за руку',
@@ -23,22 +23,36 @@ export const ru = {
     weather: { calm: 'Спокойная неделя', cloudy: 'Может быть беспокойнее', storm: 'Неделя скачка' },
   },
 
+  home: {
+    groupDaily: 'Каждый день',
+    groupDevelopment: 'Развитие',
+    pinBottom: 'Закрепить внизу',
+    unpin: 'Открепить',
+    swapTitle: 'Внизу уже три раздела',
+    swapBody: 'Чтобы закрепить «{tile}», уберите один из текущих.',
+  },
+
   rhythm: {
-    title: 'Ритм',
-    sleep: 'Сон',
-    feeding: 'Кормление',
     running: 'идёт',
+    todayLabel: 'СЕГОДНЯ',
+    empty: 'Сегодня записей пока нет.',
+    summarySleep: 'спал',
+    summaryFeedings: 'кормлений',
+  },
+
+  sleep: {
+    title: 'Сон',
     startSleep: 'Уснул',
     stopSleep: 'Проснулся',
+  },
+
+  feeding: {
+    title: 'Кормление',
     startFeeding: 'Начали кормить',
     stopFeeding: 'Закончили',
     lastFeeding: 'последнее',
     ago: 'назад',
     noFeeding: 'сегодня ещё не отмечали',
-    todayLabel: 'СЕГОДНЯ',
-    summarySleep: 'спал',
-    summaryFeedings: 'кормлений',
-    empty: 'Сегодня записей пока нет.',
   },
 
   diary: {

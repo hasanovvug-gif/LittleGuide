@@ -2,7 +2,7 @@ import { ru, type Dict } from './ru';
 
 export const en: Dict = {
   ...ru,
-  tabs: { today: 'Today', rhythm: 'Rhythm', diary: 'Diary', story: 'Story' },
+  tabs: { home: 'Home', sleep: 'Sleep', feeding: 'Feeding', diary: 'Diary', story: 'Story' },
 
   onboarding: {
     ...ru.onboarding,
@@ -28,23 +28,40 @@ export const en: Dict = {
     weather: { calm: 'A calm week', cloudy: 'May get restless', storm: 'A leap week' },
   },
 
+  home: {
+    ...ru.home,
+    groupDaily: 'Every day',
+    groupDevelopment: 'Development',
+    pinBottom: 'Pin to the bar',
+    unpin: 'Unpin',
+    swapTitle: 'The bar already has three',
+    swapBody: 'To pin “{tile}”, remove one of the current ones.',
+  },
+
   rhythm: {
     ...ru.rhythm,
-    title: 'Rhythm',
-    sleep: 'Sleep',
-    feeding: 'Feeding',
     running: 'running',
+    todayLabel: 'TODAY',
+    empty: 'Nothing recorded today yet.',
+    summarySleep: 'slept',
+    summaryFeedings: 'feedings',
+  },
+
+  sleep: {
+    ...ru.sleep,
+    title: 'Sleep',
     startSleep: 'Fell asleep',
     stopSleep: 'Woke up',
+  },
+
+  feeding: {
+    ...ru.feeding,
+    title: 'Feeding',
     startFeeding: 'Start feeding',
     stopFeeding: 'Finished',
     lastFeeding: 'last',
     ago: 'ago',
     noFeeding: 'nothing marked today yet',
-    todayLabel: 'TODAY',
-    summarySleep: 'slept',
-    summaryFeedings: 'feedings',
-    empty: 'Nothing recorded today yet.',
   },
 
   diary: {
