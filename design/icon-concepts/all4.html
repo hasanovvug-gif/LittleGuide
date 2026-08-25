@@ -1,0 +1,91 @@
+<!doctype html><meta charset="utf-8"><title>LittleGuide · ножки — форма и фон</title>
+<style>
+ :root{--ink:#1c1917;--mut:#78716c;--line:#e7e2dd}
+ *{box-sizing:border-box;margin:0}
+ body{background:#F7F4F1;color:var(--ink);font:15px/1.45 -apple-system,system-ui,sans-serif;padding:44px 48px 56px}
+ h1{font-size:26px;letter-spacing:-.02em}
+ h2{font-size:19px;margin:36px 0 4px}
+ .sub{color:var(--mut);margin:6px 0 22px;font-size:14px;max-width:1120px}
+ .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+ .card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;display:flex;gap:18px;align-items:flex-start}
+ .big{width:190px;height:190px;border-radius:22%;display:block;flex:none}
+ .name{font-weight:640;font-size:16px}
+ .desc{color:var(--mut);font-size:13px;margin-top:8px;line-height:1.45}
+ .sizes{display:flex;gap:11px;align-items:flex-end;margin-top:13px;padding-top:12px;border-top:1px solid var(--line)}
+ .sizes img{border-radius:22%;display:block}
+ .s72{width:72px;height:72px}.s48{width:48px;height:48px}.s28{width:28px;height:28px}
+ .bggrid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+ .bgc{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;text-align:center}
+ .bgc img{width:100%;aspect-ratio:1;border-radius:22%;display:block}
+ .bn{font-weight:640;font-size:13.5px;margin-top:10px}
+ .hex{color:var(--mut);font-size:11px;font-family:ui-monospace,Menlo,monospace;margin-top:3px}
+ .bd{color:var(--mut);font-size:12px;margin-top:6px;line-height:1.4}
+ .home{margin-top:18px;background:#2c2724;border-radius:20px;padding:24px 26px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+ .home.light{background:#EDE7E1;margin-top:14px}
+ .home figure{text-align:center}
+ .home img{width:76px;height:76px;border-radius:22%;display:block}
+ .home figcaption{color:#c9c2bb;font-size:11.5px;margin-top:6px}
+ .home.light figcaption{color:#6b6259}
+</style>
+<h1>LittleGuide · ножки — форма стопы и фон плитки</h1>
+<div class="sub">Ромб не тронут. Выбираем две вещи независимо: <b>форму ножки</b> (раздел 1) и <b>цвет плитки</b> (раздел 2). Плитки в разделе 2 показаны с нынешней формой — выбранная форма подставится в любой фон.</div>
+
+<h2>1 · Форма стопы — четыре силуэта</h2>
+<div class="sub">Пять пальцев везде. Смотри ряд 72/48/28 px: разница между силуэтами видна именно там.</div>
+<div class="grid">
+  <div class="card"><img class="big" src="shape-s0-soft.svg"><div class="txt"><div class="name">0 · Нынешняя</div>
+    <div class="desc">Мягкая капля, круглые пальцы. Ровно то, что было — для сравнения.</div>
+    <div class="sizes"><img class="s72" src="shape-s0-soft.svg"><img class="s48" src="shape-s0-soft.svg"><img class="s28" src="shape-s0-soft.svg"></div></div></div>
+  <div class="card"><img class="big" src="shape-s1-arch.svg"><div class="txt"><div class="name">1 · Анатомическая</div>
+    <div class="desc">Выраженный свод, узкая пятка, овальные пальцы веером. Больше всего похоже на настоящий отпечаток.</div>
+    <div class="sizes"><img class="s72" src="shape-s1-arch.svg"><img class="s48" src="shape-s1-arch.svg"><img class="s28" src="shape-s1-arch.svg"></div></div></div>
+  <div class="card"><img class="big" src="shape-s2-plump.svg"><div class="txt"><div class="name">2 · Пухлая</div>
+    <div class="desc">Широкая подушечка, толстые пальцы вплотную. Читается именно как младенческая, а не взрослая.</div>
+    <div class="sizes"><img class="s72" src="shape-s2-plump.svg"><img class="s48" src="shape-s2-plump.svg"><img class="s28" src="shape-s2-plump.svg"></div></div></div>
+  <div class="card"><img class="big" src="shape-s3-stamp.svg"><div class="txt"><div class="name">3 · Штамп</div>
+    <div class="desc">Глубокий вырез свода и крупные раздельные пальцы. Самый контрастный силуэт — лучше всех держит 28 px.</div>
+    <div class="sizes"><img class="s72" src="shape-s3-stamp.svg"><img class="s48" src="shape-s3-stamp.svg"><img class="s28" src="shape-s3-stamp.svg"></div></div></div>
+</div>
+
+<h2>2 · Фон плитки — десять вариантов</h2>
+<div class="sub">Цвет ножек подобран под контраст с фоном. 7–10 — новые: зелёные, слива, тил.</div>
+<div class="bggrid">
+  <div class="bgc"><img src="bg1-warm-dark.svg"><div class="bn">1 · Тёплый тёмный</div><div class="hex">#241A15 · #E0A264</div><div class="bd">тёмный, но коричневый — не путается с Gymbar</div></div>
+  <div class="bgc"><img src="bg2-app-night.svg"><div class="bn">2 · Ночь приложения</div><div class="hex">#15171C · #E0A264</div><div class="bd">цвет тёмной темы; почти чёрный, близнец Gymbar</div></div>
+  <div class="bgc"><img src="bg3-indigo.svg"><div class="bn">3 · Индиго</div><div class="hex">#1F1B33 · #E0A264</div><div class="bd">ночь, но не синий AsbestosGuard</div></div>
+  <div class="bgc"><img src="bg4-cocoa.svg"><div class="bn">4 · Какао</div><div class="hex">#3A231C · #F0B98A</div><div class="bd">не проваливается в чёрный на светлых обоях</div></div>
+  <div class="bgc"><img src="bg5-terracotta.svg"><div class="bn">5 · Терракота</div><div class="hex">#C9714B · #FFF3E8</div><div class="bd">средний тон из палитры приложения</div></div>
+  <div class="bgc"><img src="bg6-apricot.svg"><div class="bn">6 · Абрикос</div><div class="hex">#E8A184 · #5E3021</div><div class="bd">самая светлая плитка семьи</div></div>
+  <div class="bgc"><img src="bg7-forest.svg"><div class="bn">7 · Хвойный</div><div class="hex">#1E2E24 · #E0A264</div><div class="bd">тёмно-зелёный: спокойный, ни у кого в семье такого нет</div></div>
+  <div class="bgc"><img src="bg8-sage.svg"><div class="bn">8 · Шалфей</div><div class="hex">#6E8467 · #FFF3E8</div><div class="bd">средний зелёный, «детская-эко» тон</div></div>
+  <div class="bgc"><img src="bg9-plum.svg"><div class="bn">9 · Слива</div><div class="hex">#2E1F33 · #E0A264</div><div class="bd">тёмный фиолет, теплее индиго</div></div>
+  <div class="bgc"><img src="bg10-teal.svg"><div class="bn">10 · Полночный тил</div><div class="hex">#173A3A · #E0A264</div><div class="bd">сине-зелёный, холодная альтернатива хвойному</div></div>
+</div>
+<div class="home">
+  <figure><img src="_ref-ag.svg"><figcaption>AG</figcaption></figure>
+  <figure><img src="_ref-gym.svg"><figcaption>Gymbar</figcaption></figure>
+  <figure><img src="bg1-warm-dark.svg"><figcaption>1</figcaption></figure>
+  <figure><img src="bg2-app-night.svg"><figcaption>2</figcaption></figure>
+  <figure><img src="bg3-indigo.svg"><figcaption>3</figcaption></figure>
+  <figure><img src="bg4-cocoa.svg"><figcaption>4</figcaption></figure>
+  <figure><img src="bg5-terracotta.svg"><figcaption>5</figcaption></figure>
+  <figure><img src="bg6-apricot.svg"><figcaption>6</figcaption></figure>
+  <figure><img src="bg7-forest.svg"><figcaption>7</figcaption></figure>
+  <figure><img src="bg8-sage.svg"><figcaption>8</figcaption></figure>
+  <figure><img src="bg9-plum.svg"><figcaption>9</figcaption></figure>
+  <figure><img src="bg10-teal.svg"><figcaption>10</figcaption></figure>
+</div>
+<div class="home light">
+  <figure><img src="_ref-ag.svg"><figcaption>AG</figcaption></figure>
+  <figure><img src="_ref-gym.svg"><figcaption>Gymbar</figcaption></figure>
+  <figure><img src="bg1-warm-dark.svg"><figcaption>1</figcaption></figure>
+  <figure><img src="bg2-app-night.svg"><figcaption>2</figcaption></figure>
+  <figure><img src="bg3-indigo.svg"><figcaption>3</figcaption></figure>
+  <figure><img src="bg4-cocoa.svg"><figcaption>4</figcaption></figure>
+  <figure><img src="bg5-terracotta.svg"><figcaption>5</figcaption></figure>
+  <figure><img src="bg6-apricot.svg"><figcaption>6</figcaption></figure>
+  <figure><img src="bg7-forest.svg"><figcaption>7</figcaption></figure>
+  <figure><img src="bg8-sage.svg"><figcaption>8</figcaption></figure>
+  <figure><img src="bg9-plum.svg"><figcaption>9</figcaption></figure>
+  <figure><img src="bg10-teal.svg"><figcaption>10</figcaption></figure>
+</div>
