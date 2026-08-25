@@ -1,0 +1,31 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LittleGuide — детский шажок</title>
+  <desc id="desc">Пара мягко развёрнутых детских следов внутри белого ромба на шалфейном фоне.</desc>
+
+  <rect width="1024" height="1024" rx="213" fill="#6E8467"/>
+  <path
+    d="M512 171 853 512 512 853 171 512Z"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="96"
+    stroke-linejoin="round"
+  />
+
+  <g id="left-foot" fill="#FFF3E8" transform="translate(420 530) rotate(-6) scale(-1.1 1.1)">
+    <path d="M-46-52C-46-92 22-102 50-76 70-58 62-22 54 0 46 20 62 34 62 58 62 96-6 110-24 76-34 58-8 46-4 24 0 4-46-16-46-52Z"/>
+    <ellipse cx="-46" cy="-88" rx="25" ry="21" transform="rotate(-25 -46 -88)"/>
+    <ellipse cx="-13" cy="-108" rx="19" ry="16" transform="rotate(-12 -13 -108)"/>
+    <ellipse cx="16" cy="-110" rx="17" ry="14"/>
+    <ellipse cx="43" cy="-100" rx="14" ry="12" transform="rotate(14 43 -100)"/>
+    <ellipse cx="61" cy="-85" rx="12" ry="10" transform="rotate(26 61 -85)"/>
+  </g>
+
+  <g id="right-foot" fill="#FFF3E8" transform="translate(604 530) rotate(6) scale(1.1)">
+    <path d="M-46-52C-46-92 22-102 50-76 70-58 62-22 54 0 46 20 62 34 62 58 62 96-6 110-24 76-34 58-8 46-4 24 0 4-46-16-46-52Z"/>
+    <ellipse cx="-46" cy="-88" rx="25" ry="21" transform="rotate(-25 -46 -88)"/>
+    <ellipse cx="-13" cy="-108" rx="19" ry="16" transform="rotate(-12 -13 -108)"/>
+    <ellipse cx="16" cy="-110" rx="17" ry="14"/>
+    <ellipse cx="43" cy="-100" rx="14" ry="12" transform="rotate(14 43 -100)"/>
+    <ellipse cx="61" cy="-85" rx="12" ry="10" transform="rotate(26 61 -85)"/>
+  </g>
+</svg>

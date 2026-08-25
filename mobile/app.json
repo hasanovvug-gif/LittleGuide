@@ -20,7 +20,7 @@
       "package": "com.littleguide.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#F2E7DE"
+        "backgroundColor": "#6C8265"
       },
       "versionCode": 1
     },
