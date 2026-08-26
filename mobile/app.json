@@ -16,7 +16,7 @@
         "NSCameraUsageDescription": "Чтобы сделать снимок прямо в дневник. Фото остаётся на этом телефоне.",
         "NSMicrophoneUsageDescription": "Чтобы записать голосовую заметку в дневник. Запись остаётся на этом телефоне."
       },
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "edgeToEdgeEnabled": true,
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#6C8265"
       },
-      "versionCode": 3
+      "versionCode": 4
     },
     "plugins": [
       "expo-router",
@@ -55,7 +55,8 @@
           "photosPermission": "Чтобы добавить фото в дневник ребёнка. Снимок остаётся на этом телефоне.",
           "cameraPermission": "Чтобы сделать снимок прямо в дневник. Фото остаётся на этом телефоне."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true

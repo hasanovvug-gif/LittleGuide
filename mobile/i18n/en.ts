@@ -41,10 +41,12 @@ export const en: Dict = {
   rhythm: {
     ...ru.rhythm,
     running: 'running',
-    todayLabel: 'TODAY',
-    empty: 'Nothing recorded today yet.',
+    empty: 'Nothing recorded yet.',
     summarySleep: 'slept',
     summaryFeedings: 'feedings',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    throughNight: 'through the night',
   },
 
   sleep: {
@@ -52,6 +54,10 @@ export const en: Dict = {
     title: 'Sleep',
     startSleep: 'Fell asleep',
     stopSleep: 'Woke up',
+    nightPart: 'at night',
+    dayPart: 'in the day',
+    inSleepsCount: 'in {n} naps',
+    notSleeping: 'awake',
   },
 
   feeding: {
@@ -62,6 +68,30 @@ export const en: Dict = {
     lastFeeding: 'last',
     ago: 'ago',
     noFeeding: 'nothing marked today yet',
+  },
+
+  rhythmCard: {
+    ...ru.rhythmCard,
+    addTitle: 'New entry',
+    editTitle: 'Edit entry',
+    feedingStart: 'Started',
+    feedingEnd: 'Finished',
+    minus15: '−15 min',
+    minus30: '−30 min',
+    minus1h: '−1 h',
+    save: 'Save',
+    deleteConfirmTitle: 'Delete this entry?',
+    deleteConfirmBody: 'This cannot be undone.',
+    feedTypeLabel: 'Feeding type',
+    feedBreast: 'Breast',
+    feedBottle: 'Bottle',
+    feedSolid: 'Solid food',
+    errorEndBeforeStart: 'The end is before the start.',
+    errorFuture: 'That time has not happened yet.',
+    errorOverlap: 'Overlaps another entry.',
+    errorZeroLength: 'The start and end are the same.',
+    stuckSleep: 'The timer has run {time} — still asleep?',
+    stuckFeeding: 'The timer has run {time} — still feeding?',
   },
 
   diary: {

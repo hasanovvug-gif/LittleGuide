@@ -3,16 +3,29 @@ import { create } from 'zustand';
 import type { Lang } from '@/content/types';
 import { dayKey, monthKey } from '@/lib/age';
 import { deleteMedia, isSafeMediaName, pruneMedia } from '@/lib/media';
+import { FEED_TYPES, sanitizeRhythm, validateRhythmEvent, type RhythmError } from '@/lib/rhythm';
 
 const STORAGE_KEY = 'littleguide.v1';
-export const SCHEMA_VERSION = 2;
+// v2 → v3: новое поле feedType. Оставить версию прежней нельзя — старая сборка приняла бы
+// новый бэкап и молча выбросила feedType в normalize() на первом же persist. Честный отказ
+// на файле из будущего лучше тихой потери типов кормления.
+export const SCHEMA_VERSION = 3;
 
 export type Child = { name: string; birth: string };
 export type ThemeSetting = 'auto' | 'day' | 'night';
 export type Settings = { theme: ThemeSetting; language: Lang; aiConsent: boolean; pinnedTabs: string[] };
 
 export type RhythmKind = 'sleep' | 'feeding';
-export type RhythmEvent = { id: string; kind: RhythmKind; start: number; end: number | null };
+export type FeedType = 'breast' | 'bottle' | 'solid';
+export type RhythmEvent = {
+  id: string;
+  kind: RhythmKind;
+  start: number;
+  end: number | null;
+  /** Только для kind='feeding'. У сна и у старых записей — undefined, в ленте без метки. */
+  feedType?: FeedType;
+};
+export type { RhythmError };
 
 export type DiaryKind = 'note' | 'activity' | 'capsule' | 'story' | 'slice';
 export type DiaryEntry = {
@@ -56,6 +69,9 @@ type State = Persisted & {
   skipActivity: () => void;
   startRhythm: (kind: RhythmKind) => void;
   stopRhythm: (kind: RhythmKind) => void;
+  updateRhythm: (id: string, patch: { start?: number; end?: number | null; feedType?: FeedType }) => RhythmError | null;
+  addRhythmManual: (kind: RhythmKind, start: number, end: number | null, feedType?: FeedType) => RhythmError | null;
+  removeRhythm: (id: string) => void;
   addDiaryEntry: (entry: Omit<DiaryEntry, 'id' | 'ts'> & { ts?: number }) => Promise<void>;
   removeDiaryEntry: (id: string) => Promise<void>;
   answerCapsule: (weekIndex: number, questionId: string, text: string) => void;
@@ -162,10 +178,22 @@ export function normalize(raw: unknown): Persisted | null {
     },
     marks: rec(r.marks),
     skips: rec(r.skips),
-    rhythm: arr<RhythmEvent>(r.rhythm)
-      .filter((e) => e && typeof e.start === 'number' && (e.kind === 'sleep' || e.kind === 'feeding'))
-      .slice(0, LIMITS.rhythm)
-      .map((e) => ({ id: str(e.id, 40) || id('r'), kind: e.kind, start: e.start, end: typeof e.end === 'number' ? e.end : null })),
+    // sanitizeRhythm — не только приводит типы, но и санирует сам ритм (будущее время,
+    // end < start, дубли id, лишние открытые записи, пересечения): бэкап приходит извне
+    // и может нести что угодно, минуя любые новые валидаторы формы.
+    rhythm: sanitizeRhythm(
+      arr<RhythmEvent>(r.rhythm)
+        .filter((e) => e && typeof e.start === 'number' && (e.kind === 'sleep' || e.kind === 'feeding'))
+        .slice(0, LIMITS.rhythm)
+        .map((e) => ({
+          id: str(e.id, 40) || id('r'),
+          kind: e.kind,
+          start: e.start,
+          end: typeof e.end === 'number' ? e.end : null,
+          feedType: e.kind === 'feeding' && FEED_TYPES.includes(e.feedType as FeedType) ? (e.feedType as FeedType) : undefined,
+        })),
+      Date.now(),
+    ),
     diary: arr<DiaryEntry>(r.diary)
       .filter((e) => e && typeof e.ts === 'number' && DIARY_KINDS.includes(e.kind))
       .slice(0, LIMITS.diary)
@@ -262,8 +290,60 @@ export const useAppStore = create<State>((set, get) => ({
   },
 
   stopRhythm: (kind) => {
-    const rhythm = get().rhythm.map((e) => (e.kind === kind && e.end === null ? { ...e, end: Date.now() } : e));
-    set({ rhythm });
+    // Закрываем только самую свежую по start — раньше `map` по всем открытым закрывал их
+    // разом, а нескольким открытым записям одного вида взяться неоткуда, кроме старого бага.
+    const rhythm = get().rhythm;
+    let latest: RhythmEvent | null = null;
+    for (const e of rhythm) {
+      if (e.kind === kind && e.end === null && (!latest || e.start > latest.start)) latest = e;
+    }
+    if (!latest) return;
+    const targetId = latest.id;
+    set({ rhythm: rhythm.map((e) => (e.id === targetId ? { ...e, end: Date.now() } : e)) });
+    persist(get());
+  },
+
+  updateRhythm: (rhythmId, patch) => {
+    const rhythm = get().rhythm;
+    const target = rhythm.find((e) => e.id === rhythmId);
+    if (!target) return null;
+
+    const next = {
+      kind: target.kind,
+      start: patch.start ?? target.start,
+      end: patch.end !== undefined ? patch.end : target.end,
+    };
+    const now = Date.now();
+    const err = validateRhythmEvent(next, rhythm, now, rhythmId);
+    if (err) return err;
+
+    // feedType — только у кормления: правка сна не должна протащить тип еды в запись сна.
+    const feedType = target.kind === 'feeding'
+      ? (patch.feedType !== undefined ? patch.feedType : target.feedType)
+      : undefined;
+    let updated = rhythm.map((e) => (e.id === rhythmId ? { ...e, ...next, feedType } : e));
+    // Правка start сдвигает место записи в убывающем порядке — экран кормления ищет
+    // последнее кормление через .find() по этому порядку, честная пересортировка обязательна.
+    if (patch.start !== undefined) updated = [...updated].sort((a, b) => b.start - a.start);
+    set({ rhythm: updated });
+    persist(get());
+    return null;
+  },
+
+  addRhythmManual: (kind, start, end, feedType) => {
+    const rhythm = get().rhythm;
+    const now = Date.now();
+    const err = validateRhythmEvent({ kind, start, end }, rhythm, now);
+    if (err) return err;
+
+    const event: RhythmEvent = { id: id('r'), kind, start, end, feedType: kind === 'feeding' ? feedType : undefined };
+    set({ rhythm: [event, ...rhythm].sort((a, b) => b.start - a.start) });
+    persist(get());
+    return null;
+  },
+
+  removeRhythm: (rhythmId) => {
+    set({ rhythm: get().rhythm.filter((e) => e.id !== rhythmId) });
     persist(get());
   },
 

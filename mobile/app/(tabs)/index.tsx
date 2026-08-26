@@ -11,6 +11,7 @@ import { aiEnabled, askConsent, generateActivity, type AiActivity } from '@/lib/
 import { dayKey, formatDuration, weeksSince } from '@/lib/age';
 import { typography as t, fonts, type Theme } from '@/constants/theme';
 import { Card, Eyebrow } from '@/components/ui';
+import { useMinuteTicker } from '@/components/rhythm-shared';
 import { IconCheck, IconChevron, IconCloud, IconDots } from '@/components/Icon';
 import { SECTION_GROUPS, SECTIONS, type Section } from '@/constants/sections';
 
@@ -34,7 +35,13 @@ export default function TodayScreen() {
   const rhythm = useAppStore((s) => s.rhythm);
   const pinnedTabs = useAppStore((s) => s.settings.pinnedTabs);
 
-  const today = dayKey();
+  // Раньше Дом вообще не тикал и брал Date.now() прямо в рендере: при открытом сне цифра
+  // застывала, а после полуночи «сегодня» оставалось вчерашним, пока экран не перемонтируют.
+  // Минутный тик достаточен — секундная точность Дому не нужна, это не работающий таймер.
+  const openRhythm = rhythm.some((e) => e.end === null);
+  const now = useMinuteTicker(openRhythm);
+  const today = useMemo(() => dayKey(new Date(now)), [now]);
+
   const week = weeksSince(child.birth);
   const entry = weekEntry(lang, week);
   const weather = weatherForWeek(lang, week);
@@ -48,10 +55,10 @@ export default function TodayScreen() {
   const poolSize = useMemo(() => activitiesForWeek(lang, week).length, [lang, week]);
   const poolExhausted = (skips[today] ?? 0) >= poolSize;
 
-  const todayRhythm = useMemo(() => eventsOfDay(rhythm), [rhythm]);
+  const todayRhythm = useMemo(() => eventsOfDay(rhythm, today), [rhythm, today]);
   const sleptMs = todayRhythm
     .filter((e) => e.kind === 'sleep')
-    .reduce((sum, e) => sum + ((e.end ?? Date.now()) - e.start), 0);
+    .reduce((sum, e) => sum + ((e.end ?? now) - e.start), 0);
   const feedings = todayRhythm.filter((e) => e.kind === 'feeding').length;
 
   function togglePin(section: Section) {
@@ -251,7 +258,7 @@ export default function TodayScreen() {
           <Pressable onPress={() => router.push('/sleep')} hitSlop={8}>
             <Text style={[t.caption, { color: theme.textSecondary }]}>
               {tr.rhythm.summarySleep}{' '}
-              <Text style={{ fontFamily: fonts.sansMedium, color: theme.text }}>{formatDuration(sleptMs, true)}</Text>
+              <Text style={{ fontFamily: fonts.sansMedium, color: theme.text }}>{formatDuration(sleptMs, true, tr.common)}</Text>
             </Text>
           </Pressable>
           <Text style={[t.caption, { color: theme.caption }]}>·</Text>

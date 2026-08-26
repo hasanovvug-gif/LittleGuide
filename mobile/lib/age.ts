@@ -25,14 +25,31 @@ export function weekIndex(birthISO: string, now: Date = new Date()): number {
   return weeksSince(birthISO, now);
 }
 
-export function formatDuration(ms: number, short = false): string {
+/**
+ * `units` — единицы короткого формата, приходят из словаря (`i18n` `common.hours` /
+ * `common.minutesShort`). Раньше «ч»/«мин» были зашиты прямо здесь — украинский и
+ * английский UI показывали русские единицы независимо от выбранного языка.
+ */
+export function formatDuration(
+  ms: number,
+  short = false,
+  units: { hours: string; minutesShort: string } = { hours: 'ч', minutesShort: 'мин' },
+): string {
   const total = Math.max(0, Math.floor(ms / 1000));
   const h = Math.floor(total / 3600);
   const m = Math.floor((total % 3600) / 60);
   const s = total % 60;
-  if (short) return h > 0 ? `${h} ч ${m} мин` : `${m} мин`;
+  if (short) return h > 0 ? `${h} ${units.hours} ${m} ${units.minutesShort}` : `${m} ${units.minutesShort}`;
   const pad = (n: number) => `${n}`.padStart(2, '0');
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
+}
+
+/** «6:20» — часы:минуты без секунд. Для полоски забытого таймера, секунды там лишние. */
+export function formatHoursMinutes(ms: number): string {
+  const totalMin = Math.max(0, Math.floor(ms / 60_000));
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return `${h}:${`${m}`.padStart(2, '0')}`;
 }
 
 export function formatClock(ts: number): string {

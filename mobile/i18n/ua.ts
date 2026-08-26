@@ -41,10 +41,12 @@ export const ua: Dict = {
   rhythm: {
     ...ru.rhythm,
     running: 'триває',
-    todayLabel: 'СЬОГОДНІ',
-    empty: 'Сьогодні записів поки немає.',
+    empty: 'Записів поки немає.',
     summarySleep: 'спав',
     summaryFeedings: 'годувань',
+    today: 'Сьогодні',
+    yesterday: 'Вчора',
+    throughNight: 'через ніч',
   },
 
   sleep: {
@@ -52,6 +54,10 @@ export const ua: Dict = {
     title: 'Сон',
     startSleep: 'Заснув',
     stopSleep: 'Прокинувся',
+    nightPart: 'вночі',
+    dayPart: 'вдень',
+    inSleepsCount: 'у {n} снах',
+    notSleeping: 'не спить',
   },
 
   feeding: {
@@ -62,6 +68,30 @@ export const ua: Dict = {
     lastFeeding: 'останнє',
     ago: 'тому',
     noFeeding: 'сьогодні ще не відзначали',
+  },
+
+  rhythmCard: {
+    ...ru.rhythmCard,
+    addTitle: 'Новий запис',
+    editTitle: 'Правка запису',
+    feedingStart: 'Почали',
+    feedingEnd: 'Закінчили',
+    minus15: '−15 хв',
+    minus30: '−30 хв',
+    minus1h: '−1 год',
+    save: 'Зберегти',
+    deleteConfirmTitle: 'Видалити запис?',
+    deleteConfirmBody: 'Повернути буде не можна.',
+    feedTypeLabel: 'Тип годування',
+    feedBreast: 'Груди',
+    feedBottle: 'Пляшечка',
+    feedSolid: 'Прикорм',
+    errorEndBeforeStart: 'Кінець раніше початку.',
+    errorFuture: 'Цей час ще не настав.',
+    errorOverlap: 'Перетинається з іншим записом.',
+    errorZeroLength: 'Початок і кінець збігаються.',
+    stuckSleep: 'Таймер триває {time} — все ще спить?',
+    stuckFeeding: 'Таймер триває {time} — все ще годуєте?',
   },
 
   diary: {

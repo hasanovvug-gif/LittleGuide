@@ -34,16 +34,22 @@ export const ru = {
 
   rhythm: {
     running: 'идёт',
-    todayLabel: 'СЕГОДНЯ',
-    empty: 'Сегодня записей пока нет.',
+    empty: 'Записей пока нет.',
     summarySleep: 'спал',
     summaryFeedings: 'кормлений',
+    today: 'Сегодня',
+    yesterday: 'Вчера',
+    throughNight: 'через ночь',
   },
 
   sleep: {
     title: 'Сон',
     startSleep: 'Уснул',
     stopSleep: 'Проснулся',
+    nightPart: 'ночью',
+    dayPart: 'днём',
+    inSleepsCount: 'в {n} снах',
+    notSleeping: 'не спит',
   },
 
   feeding: {
@@ -53,6 +59,29 @@ export const ru = {
     lastFeeding: 'последнее',
     ago: 'назад',
     noFeeding: 'сегодня ещё не отмечали',
+  },
+
+  rhythmCard: {
+    addTitle: 'Новая запись',
+    editTitle: 'Правка записи',
+    feedingStart: 'Начали',
+    feedingEnd: 'Закончили',
+    minus15: '−15 мин',
+    minus30: '−30 мин',
+    minus1h: '−1 ч',
+    save: 'Сохранить',
+    deleteConfirmTitle: 'Удалить запись?',
+    deleteConfirmBody: 'Вернуть будет нельзя.',
+    feedTypeLabel: 'Тип кормления',
+    feedBreast: 'Грудь',
+    feedBottle: 'Бутылочка',
+    feedSolid: 'Прикорм',
+    errorEndBeforeStart: 'Конец раньше начала.',
+    errorFuture: 'Это время ещё не наступило.',
+    errorOverlap: 'Пересекается с другой записью.',
+    errorZeroLength: 'Начало и конец совпадают.',
+    stuckSleep: 'Таймер идёт {time} — всё ещё спит?',
+    stuckFeeding: 'Таймер идёт {time} — всё ещё кормите?',
   },
 
   diary: {

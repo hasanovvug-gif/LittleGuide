@@ -140,3 +140,20 @@ export function IconTrash({ size = 18, color }: Props) {
     </Svg>
   );
 }
+
+/** Навигация по дням над полосой суток (Сон, Кормление). */
+export function IconArrowLeft({ size = 20, color }: Props) {
+  return (
+    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M15 6l-6 6 6 6" />
+    </Svg>
+  );
+}
+
+export function IconArrowRight({ size = 20, color }: Props) {
+  return (
+    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M9 6l6 6-6 6" />
+    </Svg>
+  );
+}
