@@ -2,7 +2,7 @@ import { Redirect, Tabs } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { useT } from '@/i18n';
 import { useAppStore } from '@/store/useAppStore';
-import { IconDiary, IconFeeding, IconHome, IconSleep, IconStory } from '@/components/Icon';
+import { IconDiary, IconFeeding, IconHandover, IconHome, IconSleep, IconStory } from '@/components/Icon';
 import { fonts } from '@/constants/theme';
 
 export default function TabsLayout() {
@@ -69,6 +69,14 @@ export default function TabsLayout() {
           title: t.tabs.story,
           tabBarIcon: ({ color }) => <IconStory color={color} />,
           href: pinned('story') ? undefined : null,
+        }}
+      />
+      <Tabs.Screen
+        name="handover"
+        options={{
+          title: t.tabs.handover,
+          tabBarIcon: ({ color }) => <IconHandover color={color} />,
+          href: pinned('handover') ? undefined : null,
         }}
       />
     </Tabs>

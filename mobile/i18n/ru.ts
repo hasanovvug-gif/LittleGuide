@@ -1,5 +1,5 @@
 export const ru = {
-  tabs: { home: 'Дом', sleep: 'Сон', feeding: 'Кормление', diary: 'Дневник', story: 'Сказка' },
+  tabs: { home: 'Дом', sleep: 'Сон', feeding: 'Кормление', diary: 'Дневник', story: 'Сказка', handover: 'Передача' },
 
   onboarding: {
     title: 'Год за руку',
@@ -164,6 +164,32 @@ export const ru = {
     importFailed: 'Файл не подходит: он повреждён или сделан другим приложением.',
     noSpace: 'На телефоне не хватает места.',
     importing: 'Восстанавливаю…',
+  },
+
+  handover: {
+    title: 'Передача',
+    subtitle: 'Памятка для того, кто остаётся с ребёнком.',
+    now: 'Сейчас',
+    sleepingSince: 'Спит с',
+    notSleepingNow: 'Не спит',
+    lastFeeding: 'Последнее кормление:',
+    noFeedingYet: 'Кормлений пока не было.',
+    todaySummary: 'Сегодня:',
+    sleepNight: 'ночью',
+    sleepDay: 'днём',
+    feedingsCount: 'кормлений: {n}',
+    instructions: 'Инструкции',
+    allergiesLabel: 'Аллергии',
+    allergiesPlaceholder: 'Что нельзя, на что реакция',
+    sleepLabel: 'Как укладывать',
+    sleepPlaceholder: 'Ритуал, во сколько, что помогает уснуть',
+    comfortLabel: 'Что успокаивает',
+    comfortPlaceholder: 'Любимая игрушка, что отвлекает',
+    contactsLabel: 'Важные телефоны',
+    contactsPlaceholder: 'Мама, папа, педиатр',
+    updated: 'обновлено',
+    share: 'Поделиться',
+    shareTitle: 'Передача',
   },
 
   common: { cancel: 'Отмена', close: 'Закрыть', ok: 'Хорошо', hours: 'ч', minutesShort: 'мин', delete: 'Удалить' },

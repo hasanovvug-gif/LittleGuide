@@ -2,7 +2,7 @@ import { ru, type Dict } from './ru';
 
 export const ua: Dict = {
   ...ru,
-  tabs: { home: 'Дім', sleep: 'Сон', feeding: 'Годування', diary: 'Щоденник', story: 'Казка' },
+  tabs: { home: 'Дім', sleep: 'Сон', feeding: 'Годування', diary: 'Щоденник', story: 'Казка', handover: 'Передача' },
 
   onboarding: {
     ...ru.onboarding,
@@ -178,6 +178,33 @@ export const ua: Dict = {
     importFailed: 'Файл не підходить: він пошкоджений або зроблений іншим застосунком.',
     noSpace: 'На телефоні не вистачає місця.',
     importing: 'Відновлюю…',
+  },
+
+  handover: {
+    ...ru.handover,
+    title: 'Передача',
+    subtitle: 'Пам’ятка для того, хто лишається з дитиною.',
+    now: 'Зараз',
+    sleepingSince: 'Спить з',
+    notSleepingNow: 'Не спить',
+    lastFeeding: 'Останнє годування:',
+    noFeedingYet: 'Годувань поки не було.',
+    todaySummary: 'Сьогодні:',
+    sleepNight: 'вночі',
+    sleepDay: 'вдень',
+    feedingsCount: 'годувань: {n}',
+    instructions: 'Інструкції',
+    allergiesLabel: 'Алергії',
+    allergiesPlaceholder: 'Що не можна, на що реакція',
+    sleepLabel: 'Як укладати',
+    sleepPlaceholder: 'Ритуал, о котрій, що допомагає заснути',
+    comfortLabel: 'Що заспокоює',
+    comfortPlaceholder: 'Улюблена іграшка, що відволікає',
+    contactsLabel: 'Важливі телефони',
+    contactsPlaceholder: 'Мама, тато, педіатр',
+    updated: 'оновлено',
+    share: 'Поділитися',
+    shareTitle: 'Передача',
   },
 
   common: { cancel: 'Скасувати', close: 'Закрити', ok: 'Добре', hours: 'год', minutesShort: 'хв', delete: 'Видалити' },

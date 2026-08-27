@@ -2,7 +2,7 @@ import { ru, type Dict } from './ru';
 
 export const en: Dict = {
   ...ru,
-  tabs: { home: 'Home', sleep: 'Sleep', feeding: 'Feeding', diary: 'Diary', story: 'Story' },
+  tabs: { home: 'Home', sleep: 'Sleep', feeding: 'Feeding', diary: 'Diary', story: 'Story', handover: 'Handover' },
 
   onboarding: {
     ...ru.onboarding,
@@ -178,6 +178,33 @@ export const en: Dict = {
     importFailed: 'That file does not fit: it is damaged or made by another app.',
     noSpace: 'Not enough space on this phone.',
     importing: 'Restoring…',
+  },
+
+  handover: {
+    ...ru.handover,
+    title: 'Handover',
+    subtitle: 'A note for whoever is staying with the child.',
+    now: 'Right now',
+    sleepingSince: 'Asleep since',
+    notSleepingNow: 'Awake',
+    lastFeeding: 'Last feeding:',
+    noFeedingYet: 'No feedings yet.',
+    todaySummary: 'Today:',
+    sleepNight: 'at night',
+    sleepDay: 'in the day',
+    feedingsCount: 'feedings: {n}',
+    instructions: 'Instructions',
+    allergiesLabel: 'Allergies',
+    allergiesPlaceholder: "What's off-limits, any reactions",
+    sleepLabel: 'How to put down',
+    sleepPlaceholder: 'The routine, bedtime, what helps',
+    comfortLabel: 'What soothes',
+    comfortPlaceholder: 'Favourite toy, what distracts',
+    contactsLabel: 'Important numbers',
+    contactsPlaceholder: 'Mum, dad, paediatrician',
+    updated: 'updated',
+    share: 'Share',
+    shareTitle: 'Handover',
   },
 
   common: { cancel: 'Cancel', close: 'Close', ok: 'Got it', hours: 'h', minutesShort: 'min', delete: 'Delete' },

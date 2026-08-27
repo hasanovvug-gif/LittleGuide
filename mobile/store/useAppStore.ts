@@ -6,10 +6,11 @@ import { deleteMedia, isSafeMediaName, pruneMedia } from '@/lib/media';
 import { FEED_TYPES, sanitizeRhythm, validateRhythmEvent, type RhythmError } from '@/lib/rhythm';
 
 const STORAGE_KEY = 'littleguide.v1';
-// v2 → v3: новое поле feedType. Оставить версию прежней нельзя — старая сборка приняла бы
-// новый бэкап и молча выбросила feedType в normalize() на первом же persist. Честный отказ
-// на файле из будущего лучше тихой потери типов кормления.
-export const SCHEMA_VERSION = 3;
+// v2 → v3: новое поле feedType. v3 → v4: новый раздел handover. Оставить версию прежней
+// нельзя по тому же прецеденту — старая сборка приняла бы новый бэкап и молча выбросила
+// handover в normalize() на первом же persist. Честный отказ на файле из будущего лучше
+// тихой потери инструкций для того, кто остался с ребёнком.
+export const SCHEMA_VERSION = 4;
 
 export type Child = { name: string; birth: string };
 export type ThemeSetting = 'auto' | 'day' | 'night';
@@ -48,6 +49,15 @@ export type SavedStory = {
   source: 'bundled' | 'ai';
 };
 
+/** Памятка для того, кто остаётся с ребёнком. Только факты, которые вписал родитель — никаких оценок. */
+export type Handover = {
+  allergies: string;   // аллергии и что нельзя
+  sleep: string;        // как укладывать
+  comfort: string;      // любимое / что успокаивает
+  contacts: string;     // важные телефоны
+  updated: number | null;
+};
+
 export type Persisted = {
   version: number;
   child: Child | null;
@@ -58,6 +68,7 @@ export type Persisted = {
   diary: DiaryEntry[];
   capsule: CapsuleAnswer[];
   stories: SavedStory[];
+  handover: Handover;
 };
 
 type State = Persisted & {
@@ -77,14 +88,17 @@ type State = Persisted & {
   answerCapsule: (weekIndex: number, questionId: string, text: string) => void;
   skipCapsule: (weekIndex: number, questionId: string) => void;
   saveStory: (story: Omit<SavedStory, 'id' | 'ts'>) => string;
+  setHandover: (patch: Partial<Omit<Handover, 'updated'>>) => void;
   exportPayload: () => Persisted;
   replaceAll: (parsed: Persisted) => Promise<void>;
   reset: () => void;
 };
 
 /** Список известных id разделов для валидации pinnedTabs — синхронно с constants/sections.ts. */
-const PINNABLE_IDS = ['sleep', 'feeding', 'diary', 'story'];
+const PINNABLE_IDS = ['sleep', 'feeding', 'diary', 'story', 'handover'];
 const DEFAULT_PINNED_TABS = ['sleep', 'feeding', 'diary'];
+
+const emptyHandover: Handover = { allergies: '', sleep: '', comfort: '', contacts: '', updated: null };
 
 const emptyState: Persisted = {
   version: SCHEMA_VERSION,
@@ -96,6 +110,7 @@ const emptyState: Persisted = {
   diary: [],
   capsule: [],
   stories: [],
+  handover: emptyHandover,
 };
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -111,6 +126,7 @@ function snapshot(state: Persisted): Persisted {
     diary: state.diary,
     capsule: state.capsule,
     stories: state.stories,
+    handover: state.handover,
   };
 }
 
@@ -160,6 +176,13 @@ export function normalize(raw: unknown): Persisted | null {
     // Слотов ровно три — лишнее обрезаем; если после чистки не осталось ни одного
     // известного id (битый или чужой файл), это и есть та самая «кривизна» — дефолт.
     return known.length > 0 ? known.slice(0, 3) : DEFAULT_PINNED_TABS;
+  };
+  // Отсутствующий или неполный handover (старый бэкап schema < 4) → дефолт с пустыми строками,
+  // а не отказ всего файла — это единственное новое поле версии 4.
+  const handover = (v: unknown): Handover => {
+    const h = v && typeof v === 'object' ? (v as Partial<Handover>) : {};
+    const updated = typeof h.updated === 'number' && Number.isInteger(h.updated) && h.updated <= Date.now() ? h.updated : null;
+    return { allergies: str(h.allergies, 500), sleep: str(h.sleep, 500), comfort: str(h.comfort, 500), contacts: str(h.contacts, 500), updated };
   };
 
   return {
@@ -226,6 +249,7 @@ export function normalize(raw: unknown): Persisted | null {
         ts: e.ts,
         source: e.source === 'ai' ? 'ai' : 'bundled',
       })),
+    handover: handover(r.handover),
   };
 }
 
@@ -385,6 +409,11 @@ export const useAppStore = create<State>((set, get) => ({
     return full.id;
   },
 
+  setHandover: (patch) => {
+    set({ handover: { ...get().handover, ...patch, updated: Date.now() } });
+    persist(get());
+  },
+
   exportPayload: () => {
     const s = get();
     return {
@@ -397,6 +426,7 @@ export const useAppStore = create<State>((set, get) => ({
       diary: s.diary,
       capsule: s.capsule,
       stories: s.stories,
+      handover: s.handover,
     };
   },
 

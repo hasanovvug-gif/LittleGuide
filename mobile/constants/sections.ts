@@ -1,8 +1,8 @@
 import type { ComponentType } from 'react';
-import { IconDiary, IconFeeding, IconSleep, IconStory } from '@/components/Icon';
+import { IconDiary, IconFeeding, IconHandover, IconSleep, IconStory } from '@/components/Icon';
 import type { Dict } from '@/i18n';
 
-export type SectionId = 'sleep' | 'feeding' | 'diary' | 'story';
+export type SectionId = 'sleep' | 'feeding' | 'diary' | 'story' | 'handover';
 export type SectionGroupId = 'daily' | 'development';
 
 export type Section = {
@@ -10,7 +10,7 @@ export type Section = {
   group: SectionGroupId;
   icon: ComponentType<{ size?: number; color: string }>;
   title: (t: Dict) => string;
-  route: '/sleep' | '/feeding' | '/diary' | '/story';
+  route: '/sleep' | '/feeding' | '/diary' | '/story' | '/handover';
 };
 
 /**
@@ -21,6 +21,7 @@ export const SECTIONS: Section[] = [
   { id: 'sleep', group: 'daily', icon: IconSleep, title: (t) => t.tabs.sleep, route: '/sleep' },
   { id: 'feeding', group: 'daily', icon: IconFeeding, title: (t) => t.tabs.feeding, route: '/feeding' },
   { id: 'diary', group: 'daily', icon: IconDiary, title: (t) => t.tabs.diary, route: '/diary' },
+  { id: 'handover', group: 'daily', icon: IconHandover, title: (t) => t.tabs.handover, route: '/handover' },
   { id: 'story', group: 'development', icon: IconStory, title: (t) => t.tabs.story, route: '/story' },
 ];
 

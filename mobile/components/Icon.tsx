@@ -49,6 +49,17 @@ export function IconStory({ size = 22, color }: Props) {
   );
 }
 
+/** Памятка для того, кто остаётся с ребёнком — планшет с инструкциями и сердцем заботы. */
+export function IconHandover({ size = 22, color }: Props) {
+  return (
+    <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M9.5 3.5h5a1 1 0 0 1 1 1v1.3h-7V4.5a1 1 0 0 1 1-1z" />
+      <Path d="M6.5 6.3h11a1 1 0 0 1 1 1V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19V7.3a1 1 0 0 1 .5-1z" />
+      <Path d="M12 10.9c1.5-1.8 4.2-.4 3.4 1.6-.5 1.2-2 2.3-3.4 3.5-1.4-1.2-2.9-2.3-3.4-3.5-.8-2 1.9-3.4 3.4-1.6z" />
+    </Svg>
+  );
+}
+
 export function IconCloud({ size = 19, color }: Props) {
   return (
     <Svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke={color} strokeWidth={S} strokeLinecap="round" strokeLinejoin="round">
